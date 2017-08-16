@@ -11,6 +11,7 @@ import eu.ldob.alice.items.AFood;
 import eu.ldob.alice.items.factory.FoodFactoryUtil.Acceleration;
 import eu.ldob.alice.items.food.FoodApple;
 import eu.ldob.alice.items.food.FoodBurger;
+import eu.ldob.alice.items.food.FoodType;
 
 public class FoodFactoryBurger implements IFoodFactory {
 
@@ -32,5 +33,10 @@ public class FoodFactoryBurger implements IFoodFactory {
     @Override
     public float getSpawnRate() {
         return 0.2f;
+    }
+
+    @Override
+    public FoodType getFoodType() {
+        return FoodType.JUNK;
     }
 }

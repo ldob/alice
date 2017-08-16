@@ -37,11 +37,11 @@ public class HomeScreen  extends InputAdapter implements Screen {
         renderer = new ShapeRenderer();
         batch = new SpriteBatch();
 
-        viewport = new FitViewport(Constants.LEVEL_WORLD_SIZE, Constants.LEVEL_WORLD_SIZE);
+        viewport = new FitViewport(Constants.HOME_WORLD_SIZE, Constants.HOME_WORLD_SIZE);
         Gdx.input.setInputProcessor(this);
 
         font = new BitmapFont();
-        font.getData().setScale(Constants.LEVEL_LABEL_SCALE);
+        font.getData().setScale(Constants.LABEL_SCALE_MEDIUM);
         font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
     }
 
@@ -55,14 +55,14 @@ public class HomeScreen  extends InputAdapter implements Screen {
 
         renderer.begin(ShapeRenderer.ShapeType.Filled);
 
-        renderer.setColor(Constants.EASY_COLOR);
-        renderer.circle(Constants.EASY_CENTER.x, Constants.EASY_CENTER.y, Constants.LEVEL_BUBBLE_RADIUS);
+        renderer.setColor(Constants.PLAY_COLOR);
+        renderer.circle(Constants.LEFT_CENTER.x, Constants.LEFT_CENTER.y, Constants.BUTTON_BUBBLE_RADIUS);
 
-        renderer.setColor(Constants.MEDIUM_COLOR);
-        renderer.circle(Constants.MEDIUM_CENTER.x, Constants.MEDIUM_CENTER.y, Constants.LEVEL_BUBBLE_RADIUS);
+        renderer.setColor(Constants.BENEFITS_COLOR);
+        renderer.circle(Constants.CENTER_CENTER.x, Constants.CENTER_CENTER.y, Constants.BUTTON_BUBBLE_RADIUS);
 
-        renderer.setColor(Constants.HARD_COLOR);
-        renderer.circle(Constants.HARD_CENTER.x, Constants.HARD_CENTER.y, Constants.LEVEL_BUBBLE_RADIUS);
+        renderer.setColor(Constants.SETTINGS_COLOR);
+        renderer.circle(Constants.RIGHT_CENTER.x, Constants.RIGHT_CENTER.y, Constants.BUTTON_BUBBLE_RADIUS);
 
         renderer.end();
 
@@ -70,14 +70,14 @@ public class HomeScreen  extends InputAdapter implements Screen {
 
         batch.begin();
 
-        final GlyphLayout easyLayout = new GlyphLayout(font, Constants.EASY_LABEL);
-        font.draw(batch, Constants.EASY_LABEL, Constants.EASY_CENTER.x, Constants.EASY_CENTER.y + easyLayout.height / 2, 0, Align.center, false);
+        final GlyphLayout playLayout = new GlyphLayout(font, Constants.PLAY_LABEL);
+        font.draw(batch, Constants.PLAY_LABEL, Constants.LEFT_CENTER.x, Constants.LEFT_CENTER.y + playLayout.height / 2, 0, Align.center, false);
 
-        final GlyphLayout mediumLayout = new GlyphLayout(font, Constants.MEDIUM_LABEL);
-        font.draw(batch, Constants.MEDIUM_LABEL, Constants.MEDIUM_CENTER.x, Constants.MEDIUM_CENTER.y + mediumLayout.height / 2, 0, Align.center, false);
+        final GlyphLayout benefitsLayout = new GlyphLayout(font, Constants.BENEFITS_LABEL);
+        font.draw(batch, Constants.BENEFITS_LABEL, Constants.CENTER_CENTER.x, Constants.CENTER_CENTER.y + benefitsLayout.height / 2, 0, Align.center, false);
 
-        final GlyphLayout hardLayout = new GlyphLayout(font, Constants.HARD_LABEL);
-        font.draw(batch, Constants.HARD_LABEL, Constants.HARD_CENTER.x, Constants.HARD_CENTER.y + hardLayout.height / 2, 0, Align.center, false);
+        final GlyphLayout settingsLayout = new GlyphLayout(font, Constants.SETTINGS_LABEL);
+        font.draw(batch, Constants.SETTINGS_LABEL, Constants.RIGHT_CENTER.x, Constants.RIGHT_CENTER.y + settingsLayout.height / 2, 0, Align.center, false);
 
         batch.end();
     }
@@ -113,16 +113,16 @@ public class HomeScreen  extends InputAdapter implements Screen {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 worldTouch = viewport.unproject(new Vector2(screenX, screenY));
 
-        if (worldTouch.dst(Constants.EASY_CENTER) < Constants.LEVEL_BUBBLE_RADIUS) {
-            game.showGameScreen(Level.EASY);
-        }
-
-        if (worldTouch.dst(Constants.MEDIUM_CENTER) < Constants.LEVEL_BUBBLE_RADIUS) {
-            game.showGameScreen(Level.MEDIUM);
-        }
-
-        if (worldTouch.dst(Constants.HARD_CENTER) < Constants.LEVEL_BUBBLE_RADIUS) {
+        if (worldTouch.dst(Constants.LEFT_CENTER) < Constants.BUTTON_BUBBLE_RADIUS) {
             game.showGameScreen(Level.HARD);
+        }
+
+        if (worldTouch.dst(Constants.CENTER_CENTER) < Constants.BUTTON_BUBBLE_RADIUS) {
+            game.showBenefitsScreen();
+        }
+
+        if (worldTouch.dst(Constants.RIGHT_CENTER) < Constants.BUTTON_BUBBLE_RADIUS) {
+            // TODO
         }
 
         return true;

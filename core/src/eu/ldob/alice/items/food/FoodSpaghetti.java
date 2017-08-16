@@ -9,7 +9,7 @@ import eu.ldob.alice.items.AFood;
 
 public class FoodSpaghetti extends AFood {
 
-    private static final float RADIUS = 0.3f;
+    private final String NAME = "Spaghetti";
 
     private static final int CALORIC_VALUE = 400;
     private static final int CARBS_VALUE = 0;
@@ -20,6 +20,9 @@ public class FoodSpaghetti extends AFood {
     private static final int CALCIUM_VALUE = 0;
     private static final int IRON_VALUE = 0;
 
+    private static final float RADIUS = 0.3f;
+
+    private NutritionFacts nutritionFacts;
 
     private Vector2 position;
     private Vector2 velocity;
@@ -29,6 +32,8 @@ public class FoodSpaghetti extends AFood {
         this.position = position;
         this.acceleration = acceleration;
         this.velocity = new Vector2();
+
+        this.nutritionFacts = new NutritionFacts(CALORIC_VALUE, CARBS_VALUE, FAT_VALUE, PROTEIN_VALUE, VIT_A_VALUE, VIT_C_VALUE, CALCIUM_VALUE, IRON_VALUE);
     }
 
     @Override
@@ -58,42 +63,12 @@ public class FoodSpaghetti extends AFood {
     }
 
     @Override
-    public int getCaloricValue() {
-        return CALORIC_VALUE;
+    public String getName() {
+        return NAME;
     }
 
     @Override
-    public int getCarbs() {
-        return CARBS_VALUE;
-    }
-
-    @Override
-    public int getFat() {
-        return FAT_VALUE;
-    }
-
-    @Override
-    public int getProteins() {
-        return PROTEIN_VALUE;
-    }
-
-    @Override
-    public int getVitaminA() {
-        return VIT_A_VALUE;
-    }
-
-    @Override
-    public int getVitaminC() {
-        return VIT_C_VALUE;
-    }
-
-    @Override
-    public int getCalcium() {
-        return CALCIUM_VALUE;
-    }
-
-    @Override
-    public int getIron() {
-        return IRON_VALUE;
+    public NutritionFacts getNutritionFacts() {
+        return nutritionFacts;
     }
 }

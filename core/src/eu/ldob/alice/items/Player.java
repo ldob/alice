@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import eu.ldob.alice.Constants;
+import eu.ldob.alice.*;
 
 
 public class Player {
@@ -15,8 +15,12 @@ public class Player {
 
     private Viewport viewport;
 
-    public Player(Viewport viewport) {
+    private eu.ldob.alice.Benefits benefits;
+
+    public Player(Viewport viewport, eu.ldob.alice.Benefits benefits) {
         this.viewport = viewport;
+        this.benefits = benefits;
+
         init();
     }
 
@@ -26,14 +30,14 @@ public class Player {
 
     public void update(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            position.x -= delta * Constants.PLAYER_MOVEMENT_SPEED;
+            position.x -= delta * benefits.getPlayerSpeed();
         } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            position.x += delta * Constants.PLAYER_MOVEMENT_SPEED;
+            position.x += delta * benefits.getPlayerSpeed();
         }
 
         float accelerometerInput = -Gdx.input.getAccelerometerY() / (Constants.GRAVITATIONAL_ACCELERATION * Constants.ACCELEROMETER_SENSITIVITY);
 
-        position.x += -delta * accelerometerInput * Constants.PLAYER_MOVEMENT_SPEED;
+        position.x += -delta * accelerometerInput * benefits.getPlayerSpeed();
 
         ensureInBounds();
     }

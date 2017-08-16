@@ -8,22 +8,25 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 import java.util.Iterator;
 
-import eu.ldob.alice.Constants;
-import eu.ldob.alice.Level;
+import eu.ldob.alice.*;
 import eu.ldob.alice.items.factory.IFoodFactory;
+import eu.ldob.alice.items.food.FoodType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FoodList implements Iterable<AFood> {
 
     private Level level;
+    private eu.ldob.alice.Benefits benefits;
 
     private DelayedRemovalArray<AFood> foodList;
 
     private Viewport viewport;
 
-    public FoodList(Viewport viewport, Level level) {
-        this.level = level;
+    public FoodList(Viewport viewport, Level level, eu.ldob.alice.Benefits benefits) {
         this.viewport = viewport;
+        this.level = level;
+        this.benefits = benefits;
+
         init();
     }
 
@@ -40,8 +43,20 @@ public class FoodList implements Iterable<AFood> {
         // add new foods
         for(IFoodFactory foodFactory : level.getFoodFactories()) {
 
-            if (MathUtils.random() < delta * foodFactory.getSpawnRate()) {
-                foodList.add(foodFactory.generate(level, new Vector2(viewport.getWorldWidth() * 0.2f + MathUtils.random() * viewport.getWorldWidth() * 0.6f, viewport.getWorldHeight())));
+            float spawnRate;
+            if(foodFactory.getFoodType() == FoodType.HEALTHY) {
+                spawnRate = foodFactory.getSpawnRate() * benefits.getHealthySpawnRateFactor();
+            }
+            else if(foodFactory.getFoodType() == FoodType.JUNK) {
+
+                spawnRate = foodFactory.getSpawnRate() * benefits.getJunkSpawnRateFactor();
+            }
+            else {
+                spawnRate = foodFactory.getSpawnRate();
+            }
+
+            if (MathUtils.random() < delta * spawnRate) {
+                foodList.add(foodFactory.generate(level, new Vector2(viewport.getWorldWidth() * 0.1f + MathUtils.random() * viewport.getWorldWidth() * 0.8f, viewport.getWorldHeight())));
             }
         }
 
