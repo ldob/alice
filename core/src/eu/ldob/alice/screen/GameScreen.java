@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.Level;
+import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.items.AFood;
 import eu.ldob.alice.Benefits;
 import eu.ldob.alice.items.FoodCounter;
@@ -26,7 +25,7 @@ import eu.ldob.alice.items.food.NutritionFacts;
 public class GameScreen extends InputAdapter implements Screen {
 
     private AliceGame game;
-    private Level level;
+    private Mode mode;
     private Benefits benefits;
 
     private float time;
@@ -43,9 +42,9 @@ public class GameScreen extends InputAdapter implements Screen {
 
     private FoodCounter counter;
 
-    public GameScreen(AliceGame game, Level level, Benefits benefits) {
+    public GameScreen(AliceGame game, Mode mode, Benefits benefits) {
         this.game = game;
-        this.level = level;
+        this.mode = mode;
         this.benefits = benefits;
     }
 
@@ -63,7 +62,7 @@ public class GameScreen extends InputAdapter implements Screen {
         font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         player = new Player(gameViewport, benefits);
-        foodList = new FoodList(gameViewport, level, benefits);
+        foodList = new FoodList(gameViewport, mode, benefits);
 
         Gdx.input.setInputProcessor(this);
 
@@ -77,6 +76,7 @@ public class GameScreen extends InputAdapter implements Screen {
         gameViewport.update(width, height, true);
         hudViewport.update(width, height, true);
         font.getData().setScale(Math.min(width, height) / Constants.HUD_FONT_REFERENCE_SCREEN_SIZE);
+        font.setColor(Constants.LABEL_COLOR);
 
         player.init();
         foodList.init();
@@ -89,6 +89,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void render(float delta) {
+
         foodList.update(delta);
         player.update(delta);
 
@@ -98,6 +99,11 @@ public class GameScreen extends InputAdapter implements Screen {
         if(hit != null) {
             counter.add(hit);
             foodList.removeValue(hit);
+        }
+
+        if(mode.getEvaluation().isGameOver(benefits, time, counter)) {
+            game.showResultScreen(counter, mode);
+            return;
         }
 
         gameViewport.apply(true);
@@ -114,17 +120,10 @@ public class GameScreen extends InputAdapter implements Screen {
         batch.setProjectionMatrix(hudViewport.getCamera().combined);
         batch.begin();
 
-        NutritionFacts totalNutritionFacts = counter.getTotalNutritionFacts();
-        final String rightHudText =
-                Constants.SCORE_TIME_LABEL + MathUtils.round(time) + Constants.SCORE_TIME_UNIT + "\n" +
-                Constants.SCORE_CALORIC_VALUE_LABEL + totalNutritionFacts.getCaloricValue() + Constants.SCORE_CALORIC_VALUE_UNIT + "\n" +
-                Constants.SCORE_CARBS_LABEL + totalNutritionFacts.getCarbs() + Constants.SCORE_CARBS_UNIT + "\n" +
-                Constants.SCORE_FAT_LABEL + totalNutritionFacts.getFat() + Constants.SCORE_FAT_UNIT + "\n" +
-                Constants.SCORE_PROTEINS_LABEL + totalNutritionFacts.getProteins() + Constants.SCORE_PROTEINS_UNIT + "\n" +
-                Constants.SCORE_VITAMIN_A_LABEL + totalNutritionFacts.getVitaminA() + Constants.SCORE_VITAMIN_A_UNIT + "\n" +
-                Constants.SCORE_VITAMIN_C_LABEL + totalNutritionFacts.getVitaminC() + Constants.SCORE_VITAMIN_C_UNIT + "\n" +
-                Constants.SCORE_CALCIUM_LABEL + totalNutritionFacts.getCalcium() + Constants.SCORE_CALCIUM_UNIT + "\n" +
-                Constants.SCORE_IRON_LABEL + totalNutritionFacts.getIron() + Constants.SCORE_IRON_UNIT;
+        font.getData().markupEnabled = true;
+
+        final String rightHudText = mode.getEvaluation().getHudText(benefits, time, counter);
+
 
         font.draw(batch, rightHudText, hudViewport.getWorldWidth() - Constants.HUD_MARGIN, hudViewport.getWorldHeight() - Constants.HUD_MARGIN, 0, Align.right, false);
 
@@ -149,7 +148,7 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        game.showResultScreen(counter, level);
+        game.showResultScreen(counter, mode);
         return true;
     }
 }

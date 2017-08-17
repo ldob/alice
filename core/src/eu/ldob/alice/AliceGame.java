@@ -6,6 +6,7 @@ import eu.ldob.alice.items.FoodCounter;
 import eu.ldob.alice.screen.BenefitsScreen;
 import eu.ldob.alice.screen.GameScreen;
 import eu.ldob.alice.screen.HomeScreen;
+import eu.ldob.alice.screen.ModeScreen;
 import eu.ldob.alice.screen.ResultScreen;
 
 public class AliceGame extends Game {
@@ -27,11 +28,15 @@ public class AliceGame extends Game {
 		setScreen(new BenefitsScreen(this, benefits));
 	}
 
-	public void showGameScreen(Level level) {
-		setScreen(new GameScreen(this, level, benefits));
+	public void showModeScreen() {
+		setScreen(new ModeScreen(this, benefits));
 	}
 
-	public void showResultScreen(FoodCounter counter, Level level) {
-		setScreen(new ResultScreen(this, counter, level, benefits));
+	public void showGameScreen(eu.ldob.alice.mode.Mode mode) {
+		setScreen(new GameScreen(this, mode, benefits));
+	}
+
+	public void showResultScreen(FoodCounter counter, eu.ldob.alice.mode.Mode mode) {
+		setScreen(new ResultScreen(this, counter, mode, benefits));
 	}
 }

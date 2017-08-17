@@ -15,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.Level;
 
 
 public class HomeScreen  extends InputAdapter implements Screen {
@@ -42,6 +41,7 @@ public class HomeScreen  extends InputAdapter implements Screen {
 
         font = new BitmapFont();
         font.getData().setScale(Constants.LABEL_SCALE_MEDIUM);
+        font.setColor(Constants.LABEL_COLOR);
         font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
     }
 
@@ -114,7 +114,7 @@ public class HomeScreen  extends InputAdapter implements Screen {
         Vector2 worldTouch = viewport.unproject(new Vector2(screenX, screenY));
 
         if (worldTouch.dst(Constants.LEFT_CENTER) < Constants.BUTTON_BUBBLE_RADIUS) {
-            game.showGameScreen(Level.HARD);
+            game.showModeScreen();
         }
 
         if (worldTouch.dst(Constants.CENTER_CENTER) < Constants.BUTTON_BUBBLE_RADIUS) {

@@ -15,16 +15,16 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FoodList implements Iterable<AFood> {
 
-    private Level level;
+    private eu.ldob.alice.mode.Mode mode;
     private eu.ldob.alice.Benefits benefits;
 
     private DelayedRemovalArray<AFood> foodList;
 
     private Viewport viewport;
 
-    public FoodList(Viewport viewport, Level level, eu.ldob.alice.Benefits benefits) {
+    public FoodList(Viewport viewport, eu.ldob.alice.mode.Mode mode, eu.ldob.alice.Benefits benefits) {
         this.viewport = viewport;
-        this.level = level;
+        this.mode = mode;
         this.benefits = benefits;
 
         init();
@@ -41,7 +41,7 @@ public class FoodList implements Iterable<AFood> {
     public void update(float delta) {
 
         // add new foods
-        for(IFoodFactory foodFactory : level.getFoodFactories()) {
+        for(IFoodFactory foodFactory : mode.getFoodFactories()) {
 
             float spawnRate;
             if(foodFactory.getFoodType() == FoodType.HEALTHY) {
@@ -56,7 +56,7 @@ public class FoodList implements Iterable<AFood> {
             }
 
             if (MathUtils.random() < delta * spawnRate) {
-                foodList.add(foodFactory.generate(level, new Vector2(viewport.getWorldWidth() * 0.1f + MathUtils.random() * viewport.getWorldWidth() * 0.8f, viewport.getWorldHeight())));
+                foodList.add(foodFactory.generate(benefits, new Vector2(viewport.getWorldWidth() * 0.1f + MathUtils.random() * viewport.getWorldWidth() * 0.8f, viewport.getWorldHeight())));
             }
         }
 

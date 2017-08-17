@@ -8,7 +8,7 @@ public class Benefits {
     private static final int MAXIMUM_GAME_TIME_SHORT = 60;
     private static final int MAXIMUM_GAME_TIME_LONG = 80;
 
-    private static final int CALORIC_VALUE_LOW = 1880;
+    private static final float CALORIC_VALUE_FACTOR = 1.25f;
     private static final int CALORIC_VALUE_HIGH = 2350;
 
     private static final float FOOD_HEALTHY_SPAWN_FACTOR_MORE = 1.3f;
@@ -26,16 +26,11 @@ public class Benefits {
     }
 
     public float getPlayerScale() {
-        return benefitBiggerPlayer ? -1f : 1;
+        return benefitBiggerPlayer ? 1 : 1;
     }
 
-    public int getMaximumGameTime() {
-        return benefitPersistentPlayer ? MAXIMUM_GAME_TIME_LONG : MAXIMUM_GAME_TIME_SHORT;
-    }
-
-
-    public float getCaloricValue() {
-        return benefitMoreCaloricValue ? CALORIC_VALUE_HIGH : CALORIC_VALUE_LOW;
+    public float getCaloricValueFactor() {
+        return benefitMoreCaloricValue ? CALORIC_VALUE_FACTOR : 1;
     }
 
     public float getHealthySpawnRateFactor() {

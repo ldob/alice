@@ -5,41 +5,35 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
-import eu.ldob.alice.Level;
+import eu.ldob.alice.Benefits;
 
 public class FoodFactoryUtil {
 
-    protected static Vector2 getAcceleration(Level level, Map<Acceleration,Vector2> accelerations) {
+    protected static Vector2 getAcceleration(Benefits benefits, Map<Acceleration,Vector2> accelerations) {
         Vector2 acceleration;
-        int deviation;
+        float deviation = 30f;      // in percent
 
-        if(level == Level.HARD) {
-            deviation = 30;
+        boolean moveSlow = benefits.isBenefitPersistentPlayer();
 
-            float random = MathUtils.random();
-            if(random < 0.33f) {
-                acceleration = accelerations.get(Acceleration.HIGH_LEFT);
-            }
-            else if(random > 0.66f) {
-                acceleration = accelerations.get(Acceleration.HIGH_RIGHT);
-            }
-            else {
-                acceleration = accelerations.get(Acceleration.HIGH);
-            }
+        if(moveSlow) {
+            deviation = deviation / 1.5f;
         }
-        else if(level == Level.MEDIUM) {
-            deviation = 10;
-            acceleration = accelerations.get(Acceleration.MEDIUM);
+
+        float random = MathUtils.random();
+        if(random < 0.33f) {
+            acceleration = accelerations.get(moveSlow ? Acceleration.LOW_LEFT : Acceleration.HIGH_LEFT);
+        }
+        else if(random > 0.66f) {
+            acceleration = accelerations.get(moveSlow ? Acceleration.LOW_RIGHT : Acceleration.HIGH_RIGHT);
         }
         else {
-            deviation = 7;
-            acceleration = accelerations.get(Acceleration.LOW);
+            acceleration = accelerations.get(moveSlow ? Acceleration.LOW : Acceleration.HIGH);
         }
 
         return acceleration.add(new Vector2(acceleration).scl((float) ((0.5 - Math.random()) * deviation / 100.0)));
     }
 
     protected enum Acceleration {
-        LOW, MEDIUM, HIGH, HIGH_LEFT, HIGH_RIGHT
+        LOW, LOW_LEFT, LOW_RIGHT, HIGH, HIGH_LEFT, HIGH_RIGHT
     }
 }

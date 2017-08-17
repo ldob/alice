@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.Level;
+import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.items.AFood;
 import eu.ldob.alice.Benefits;
 import eu.ldob.alice.items.FoodCounter;
@@ -22,7 +22,7 @@ import eu.ldob.alice.items.FoodCounter;
 public class ResultScreen extends InputAdapter implements Screen {
 
     private AliceGame game;
-    private Level level;
+    private Mode mode;
     private Benefits benefits;
 
     private ShapeRenderer renderer;
@@ -33,9 +33,9 @@ public class ResultScreen extends InputAdapter implements Screen {
 
     private FoodCounter counter;
 
-    public ResultScreen(AliceGame game, FoodCounter counter, Level level, Benefits benefits) {
+    public ResultScreen(AliceGame game, FoodCounter counter, Mode mode, Benefits benefits) {
         this.game = game;
-        this.level = level;
+        this.mode = mode;
         this.benefits = benefits;
         this.counter = counter;
     }
@@ -49,7 +49,8 @@ public class ResultScreen extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(this);
 
         font = new BitmapFont();
-        font.getData().setScale(Constants.LABEL_SCALE_MEDIUM);
+        font.getData().setScale(Constants.LABEL_SCALE_LARGE);
+        font.setColor(Constants.LABEL_COLOR);
         font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
     }
 
@@ -81,19 +82,6 @@ public class ResultScreen extends InputAdapter implements Screen {
         font.draw(batch, text, Constants.LEFT_CENTER.x, Constants.LEFT_CENTER.y + layout.height / 2, 0, Align.center, false);
 
         batch.end();
-
-        /*
-        final String rightHudText =
-                Constants.SCORE_TIME_LABEL + MathUtils.round(time) + Constants.SCORE_TIME_UNIT + "\n" +
-                Constants.SCORE_CALORIC_VALUE_LABEL + totalNutritionFacts.getCaloricValue() + Constants.SCORE_CALORIC_VALUE_UNIT + "\n" +
-                Constants.SCORE_CARBS_LABEL + totalNutritionFacts.getCarbs() + Constants.SCORE_CARBS_UNIT + "\n" +
-                Constants.SCORE_FAT_LABEL + totalNutritionFacts.getFat() + Constants.SCORE_FAT_UNIT + "\n" +
-                Constants.SCORE_PROTEINS_LABEL + totalNutritionFacts.getProteins() + Constants.SCORE_PROTEINS_UNIT + "\n" +
-                Constants.SCORE_VITAMIN_A_LABEL + totalNutritionFacts.getVitaminA() + Constants.SCORE_VITAMIN_A_UNIT + "\n" +
-                Constants.SCORE_VITAMIN_C_LABEL + totalNutritionFacts.getVitaminC() + Constants.SCORE_VITAMIN_C_UNIT + "\n" +
-                Constants.SCORE_CALCIUM_LABEL + totalNutritionFacts.getCalcium() + Constants.SCORE_CALCIUM_UNIT + "\n" +
-                Constants.SCORE_IRON_LABEL + totalNutritionFacts.getIron() + Constants.SCORE_IRON_UNIT;
-        */
     }
 
     @Override
