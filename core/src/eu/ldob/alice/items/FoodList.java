@@ -1,6 +1,6 @@
 package eu.ldob.alice.items;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.DelayedRemovalArray;
@@ -9,20 +9,19 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import java.util.Iterator;
 
 import eu.ldob.alice.*;
-import eu.ldob.alice.items.factory.IFoodFactory;
 import eu.ldob.alice.items.food.FoodType;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 public class FoodList implements Iterable<AFood> {
 
     private eu.ldob.alice.mode.Mode mode;
-    private eu.ldob.alice.Benefits benefits;
+    private eu.ldob.alice.mode.Benefits benefits;
 
     private DelayedRemovalArray<AFood> foodList;
 
     private Viewport viewport;
 
-    public FoodList(Viewport viewport, eu.ldob.alice.mode.Mode mode, eu.ldob.alice.Benefits benefits) {
+    public FoodList(Viewport viewport, eu.ldob.alice.mode.Mode mode, eu.ldob.alice.mode.Benefits benefits) {
         this.viewport = viewport;
         this.mode = mode;
         this.benefits = benefits;
@@ -75,9 +74,9 @@ public class FoodList implements Iterable<AFood> {
         foodList.end();
     }
 
-    public void render(ShapeRenderer renderer) {
+    public void draw(SpriteBatch batch) {
         for(int i = 0; i < foodList.size; i++) {
-            foodList.get(i).render(renderer);
+            foodList.get(i).draw(batch);
         }
     }
 

@@ -1,110 +1,143 @@
 package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.Benefits;
+import eu.ldob.alice.mode.Benefits;
 
 
-public class BenefitsScreen extends InputAdapter implements Screen {
+public class BenefitsScreen implements Screen {
+
+    private Stage stage;
+    private Skin skin;
 
     private AliceGame game;
     private Benefits benefits;
 
-    private ShapeRenderer renderer;
-    private SpriteBatch batch;
-    private FitViewport viewport;
-
-    private BitmapFont font;
-
-    public BenefitsScreen(AliceGame game, Benefits benefits) {
+    public BenefitsScreen(AliceGame game, Skin skin, Benefits benefits) {
         this.game = game;
+        this.skin = skin;
         this.benefits = benefits;
     }
 
     @Override
     public void show() {
-        renderer = new ShapeRenderer();
-        batch = new SpriteBatch();
 
-        viewport = new FitViewport(Constants.HOME_WORLD_SIZE, Constants.HOME_WORLD_SIZE);
-        Gdx.input.setInputProcessor(this);
+        stage = new Stage(new ScreenViewport());
+        Gdx.input.setInputProcessor(stage);
 
-        font = new BitmapFont();
-        font.getData().setScale(Constants.LABEL_SCALE_SMALL);
-        font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        Table tbRoot = new Table();
+        tbRoot.setFillParent(true);
+        tbRoot.setDebug(Constants.DEBUG);
+        stage.addActor(tbRoot);
+
+        final Label lbHead = new Label(Constants.BENEFITS_LABEL, skin);
+        tbRoot.add(lbHead).expand().top();
+
+        Table tbBenefits = new Table();
+        tbBenefits.setFillParent(true);
+        tbBenefits.setDebug(Constants.DEBUG);
+        tbRoot.addActor(tbBenefits);
+
+        final Label lbDescription = new Label(Constants.BENEFITS_DESCRIPTION, skin);
+
+        final Label lbFast = new Label(Constants.FAST_LABEL, skin);
+        final CheckBox cbFast = new CheckBox("", skin);
+        cbFast.setChecked(benefits.isBenefitFastPlayer());
+
+        final Label lbBig = new Label(Constants.BIG_LABEL, skin);
+        final CheckBox cbBig = new CheckBox("", skin);
+        cbBig.setChecked(benefits.isBenefitBiggerPlayer());
+
+        final Label lbPersistent = new Label(Constants.PERSISTENT_LABEL, skin);
+        final CheckBox cbPersistent = new CheckBox("", skin);
+        cbPersistent.setChecked(benefits.isBenefitPersistentPlayer());
+
+        final Label lbCaloric = new Label(Constants.CALORIC_LABEL, skin);
+        final CheckBox cbCaloric = new CheckBox("", skin);
+        cbCaloric.setChecked(benefits.isBenefitMoreCaloricValue());
+
+        final Label lbHealthy = new Label(Constants.HEALTHY_LABEL, skin);
+        final CheckBox cbHealthy = new CheckBox("", skin);
+        cbHealthy.setChecked(benefits.isBenefitMoreHealthyFood());
+
+        final Label lbJunk = new Label(Constants.JUNK_LABEL, skin);
+        final CheckBox cbJunk = new CheckBox("", skin);
+        cbJunk.setChecked(benefits.isBenefitLessJunkFood());
+
+        final TextButton btBack = new TextButton(Constants.BACK_LABEL, skin);
+        final TextButton btSave = new TextButton(Constants.SAVE_LABEL, skin);
+
+        tbBenefits.add(lbDescription).fillX().colspan(2);
+        tbBenefits.row().padTop(25);
+        tbBenefits.add(lbFast).left();
+        tbBenefits.add(cbFast);
+        tbBenefits.row();
+        tbBenefits.add(lbBig).left();
+        tbBenefits.add(cbBig);
+        tbBenefits.row();
+        tbBenefits.add(lbPersistent).left();
+        tbBenefits.add(cbPersistent);
+        tbBenefits.row();
+        tbBenefits.add(lbCaloric).left();
+        tbBenefits.add(cbCaloric);
+        tbBenefits.row();
+        tbBenefits.add(lbHealthy).left();
+        tbBenefits.add(cbHealthy);
+        tbBenefits.row();
+        tbBenefits.add(lbJunk).left();
+        tbBenefits.add(cbJunk);
+        tbBenefits.row().padTop(25);
+        tbBenefits.add(btBack).left();
+        tbBenefits.add(btSave).right();
+
+        btBack.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.showHomeScreen();
+            }
+        });
+
+        btSave.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                benefits.setBenefitFastPlayer(cbFast.isChecked());
+                benefits.setBenefitBiggerPlayer(cbBig.isChecked());
+                benefits.setBenefitPersistentPlayer(cbPersistent.isChecked());
+                benefits.setBenefitMoreCaloricValue(cbCaloric.isChecked());
+                benefits.setBenefitMoreHealthyFood(cbHealthy.isChecked());
+                benefits.setBenefitLessJunkFood(cbJunk.isChecked());
+
+                game.showHomeScreen();
+            }
+        });
     }
 
     @Override
     public void render(float delta) {
-        viewport.apply();
+
         Gdx.gl.glClearColor(Constants.BACKGROUND_COLOR.r, Constants.BACKGROUND_COLOR.g, Constants.BACKGROUND_COLOR.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.setProjectionMatrix(viewport.getCamera().combined);
-
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        renderer.setColor(benefits.isBenefitFastPlayer() ? Constants.BENEFIT_SET_COLOR : Constants.BENEFIT_UNSET_COLOR);
-        renderer.circle(Constants.LEFT_TOP.x, Constants.LEFT_TOP.y, Constants.BUTTON_BUBBLE_RADIUS);
-
-        renderer.setColor(benefits.isBenefitBiggerPlayer() ? Constants.BENEFIT_SET_COLOR : Constants.BENEFIT_UNSET_COLOR);
-        renderer.circle(Constants.CENTER_TOP.x, Constants.CENTER_TOP.y, Constants.BUTTON_BUBBLE_RADIUS);
-
-        renderer.setColor(benefits.isBenefitPersistentPlayer() ? Constants.BENEFIT_SET_COLOR : Constants.BENEFIT_UNSET_COLOR);
-        renderer.circle(Constants.RIGHT_TOP.x, Constants.RIGHT_TOP.y, Constants.BUTTON_BUBBLE_RADIUS);
-
-        renderer.setColor(benefits.isBenefitMoreCaloricValue() ? Constants.BENEFIT_SET_COLOR : Constants.BENEFIT_UNSET_COLOR);
-        renderer.circle(Constants.LEFT_BOTTOM.x, Constants.LEFT_BOTTOM.y, Constants.BUTTON_BUBBLE_RADIUS);
-
-        renderer.setColor(benefits.isBenefitMoreHealthyFood() ? Constants.BENEFIT_SET_COLOR : Constants.BENEFIT_UNSET_COLOR);
-        renderer.circle(Constants.CENTER_BOTTOM.x, Constants.CENTER_BOTTOM.y, Constants.BUTTON_BUBBLE_RADIUS);
-
-        renderer.setColor(benefits.isBenefitLessJunkFood() ? Constants.BENEFIT_SET_COLOR : Constants.BENEFIT_UNSET_COLOR);
-        renderer.circle(Constants.RIGHT_BOTTOM.x, Constants.RIGHT_BOTTOM.y, Constants.BUTTON_BUBBLE_RADIUS);
-
-        renderer.end();
-
-        batch.setProjectionMatrix(viewport.getCamera().combined);
-
-        batch.begin();
-
-        final GlyphLayout fastLayout = new GlyphLayout(font, Constants.FAST_LABEL);
-        font.draw(batch, Constants.FAST_LABEL, Constants.LEFT_TOP.x, Constants.LEFT_TOP.y + fastLayout.height / 2, 0, Align.center, false);
-
-        final GlyphLayout bigLayout = new GlyphLayout(font, Constants.BIG_LABEL);
-        font.draw(batch, Constants.BIG_LABEL, Constants.CENTER_TOP.x, Constants.CENTER_TOP.y + bigLayout.height / 2, 0, Align.center, false);
-
-        final GlyphLayout persistentLayout = new GlyphLayout(font, Constants.PERSISTENT_LABEL);
-        font.draw(batch, Constants.PERSISTENT_LABEL, Constants.RIGHT_TOP.x, Constants.RIGHT_TOP.y + persistentLayout.height / 2, 0, Align.center, false);
-
-        final GlyphLayout caloricLayout = new GlyphLayout(font, Constants.CALORIC_LABEL);
-        font.draw(batch, Constants.CALORIC_LABEL, Constants.LEFT_BOTTOM.x, Constants.LEFT_BOTTOM.y + caloricLayout.height / 2, 0, Align.center, false);
-
-        final GlyphLayout healthyLayout = new GlyphLayout(font, Constants.HEALTHY_LABEL);
-        font.draw(batch, Constants.HEALTHY_LABEL, Constants.CENTER_BOTTOM.x, Constants.CENTER_BOTTOM.y + healthyLayout.height / 2, 0, Align.center, false);
-
-        final GlyphLayout junkLayout = new GlyphLayout(font, Constants.JUNK_LABEL);
-        font.draw(batch, Constants.JUNK_LABEL, Constants.RIGHT_BOTTOM.x, Constants.RIGHT_BOTTOM.y + junkLayout.height / 2, 0, Align.center, false);
-
-        batch.end();
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        viewport.update(width, height, true);
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
@@ -119,42 +152,11 @@ public class BenefitsScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-        batch.dispose();
-        font.dispose();
-        renderer.dispose();
+        stage.dispose();
     }
 
     @Override
     public void dispose() {
-
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector2 worldTouch = viewport.unproject(new Vector2(screenX, screenY));
-
-        if (worldTouch.dst(Constants.LEFT_TOP) < Constants.BUTTON_BUBBLE_RADIUS) {
-            benefits.setBenefitFastPlayer(!benefits.isBenefitFastPlayer());
-        }
-        else if (worldTouch.dst(Constants.CENTER_TOP) < Constants.BUTTON_BUBBLE_RADIUS) {
-            benefits.setBenefitBiggerPlayer(!benefits.isBenefitBiggerPlayer());
-        }
-        else if (worldTouch.dst(Constants.RIGHT_TOP) < Constants.BUTTON_BUBBLE_RADIUS) {
-            benefits.setBenefitPersistentPlayer(!benefits.isBenefitPersistentPlayer());
-        }
-        else if (worldTouch.dst(Constants.LEFT_BOTTOM) < Constants.BUTTON_BUBBLE_RADIUS) {
-            benefits.setBenefitMoreCaloricValue(!benefits.isBenefitMoreCaloricValue());
-        }
-        else if (worldTouch.dst(Constants.CENTER_BOTTOM) < Constants.BUTTON_BUBBLE_RADIUS) {
-            benefits.setBenefitMoreHealthyFood(!benefits.isBenefitMoreHealthyFood());
-        }
-        else if (worldTouch.dst(Constants.RIGHT_BOTTOM) < Constants.BUTTON_BUBBLE_RADIUS) {
-            benefits.setBenefitLessJunkFood(!benefits.isBenefitLessJunkFood());
-        }
-        else {
-            game.showHomeScreen();
-        }
-
-        return true;
+        stage.dispose();
     }
 }

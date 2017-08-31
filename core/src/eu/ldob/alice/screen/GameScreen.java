@@ -16,11 +16,10 @@ import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
 import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.items.AFood;
-import eu.ldob.alice.Benefits;
+import eu.ldob.alice.mode.Benefits;
 import eu.ldob.alice.items.FoodCounter;
 import eu.ldob.alice.items.FoodList;
 import eu.ldob.alice.items.Player;
-import eu.ldob.alice.items.food.NutritionFacts;
 
 public class GameScreen extends InputAdapter implements Screen {
 
@@ -30,11 +29,12 @@ public class GameScreen extends InputAdapter implements Screen {
 
     private float time;
 
-    private ExtendViewport gameViewport;
-    private ShapeRenderer renderer;
+    private ScreenViewport gameViewport;
+    private SpriteBatch gameBatch;
 
     private ScreenViewport hudViewport;
-    private SpriteBatch batch;
+    private SpriteBatch hudBatch;
+
     private BitmapFont font;
 
     private Player player;
@@ -50,13 +50,11 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void show() {
-        gameViewport = new ExtendViewport(Constants.WORLD_SIZE, Constants.WORLD_SIZE);
-
-        renderer = new ShapeRenderer();
-        renderer.setAutoShapeType(true);
+        gameViewport = new ScreenViewport();
+        gameBatch = new SpriteBatch();
 
         hudViewport = new ScreenViewport();
-        batch = new SpriteBatch();
+        hudBatch = new SpriteBatch();
 
         font = new BitmapFont();
         font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -102,32 +100,29 @@ public class GameScreen extends InputAdapter implements Screen {
         }
 
         if(mode.getEvaluation().isGameOver(benefits, time, counter)) {
-            game.showResultScreen(counter, mode);
+            game.showResultScreen(time, counter, mode);
             return;
         }
 
-        gameViewport.apply(true);
         Gdx.gl.glClearColor(Constants.BACKGROUND_COLOR.r, Constants.BACKGROUND_COLOR.g, Constants.BACKGROUND_COLOR.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.setProjectionMatrix(gameViewport.getCamera().combined);
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
-        foodList.render(renderer);
-        player.render(renderer);
-        renderer.end();
+        gameViewport.apply(true);
+        gameBatch.setProjectionMatrix(gameViewport.getCamera().combined);
+
+        foodList.draw(gameBatch);
+        player.draw(gameBatch);
+
 
         hudViewport.apply();
-        batch.setProjectionMatrix(hudViewport.getCamera().combined);
-        batch.begin();
-
-        font.getData().markupEnabled = true;
+        hudBatch.setProjectionMatrix(hudViewport.getCamera().combined);
+        hudBatch.begin();
 
         final String rightHudText = mode.getEvaluation().getHudText(benefits, time, counter);
+        font.getData().markupEnabled = true;
+        font.draw(hudBatch, rightHudText, hudViewport.getWorldWidth() - Constants.HUD_MARGIN, hudViewport.getWorldHeight() - Constants.HUD_MARGIN, 0, Align.right, false);
 
-
-        font.draw(batch, rightHudText, hudViewport.getWorldWidth() - Constants.HUD_MARGIN, hudViewport.getWorldHeight() - Constants.HUD_MARGIN, 0, Align.right, false);
-
-        batch.end();
+        hudBatch.end();
     }
 
     @Override
@@ -142,13 +137,13 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-        renderer.dispose();
-        batch.dispose();
+        gameBatch.dispose();
+        hudBatch.dispose();
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        game.showResultScreen(counter, mode);
+        game.showResultScreen(time, counter, mode);
         return true;
     }
 }

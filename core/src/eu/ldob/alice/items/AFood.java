@@ -1,18 +1,19 @@
 package eu.ldob.alice.items;
 
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
+import eu.ldob.alice.Constants;
 import eu.ldob.alice.items.food.NutritionFacts;
 
 public abstract class AFood {
 
-    public abstract void render(ShapeRenderer renderer);
-
     protected abstract Vector2 getPosition();
     protected abstract Vector2 getVelocity();
     protected abstract Vector2 getAcceleration();
-    protected abstract float getRadius();
+    protected abstract Sprite getSprite();
 
 
     public abstract NutritionFacts getNutritionFacts();
@@ -23,12 +24,20 @@ public abstract class AFood {
     }
 
     public void update(float delta) {
-        this.getVelocity().mulAdd(this.getAcceleration(), delta);
+        this.getVelocity().mulAdd(this.getAcceleration(), delta * Constants.VELOCITY_SCALE);
         this.getPosition().mulAdd(this.getVelocity(), delta);
     }
 
+    public void draw(SpriteBatch batch) {
+        this.getSprite().setPosition(this.getPosition().x, this.getPosition().y);
+
+        batch.begin();
+        this.getSprite().draw(batch);
+        batch.end();
+    }
+
     public boolean removeFromScreen() {
-        return this.getPosition().y < -this.getRadius();
+        return this.getPosition().y < 0;
     }
 
     @Override

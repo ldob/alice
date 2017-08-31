@@ -1,9 +1,9 @@
-package eu.ldob.alice;
+package eu.ldob.alice.mode;
 
 public class Benefits {
 
-    private static final float PLAYER_SPEED_SLOW = 10.0f;
-    private static final float PLAYER_SPEED_FAST = 14.0f;
+    private static final float PLAYER_SPEED_SLOW = 10f;
+    private static final float PLAYER_SPEED_FAST = 14f;
 
     private static final int MAXIMUM_GAME_TIME_SHORT = 60;
     private static final int MAXIMUM_GAME_TIME_LONG = 80;

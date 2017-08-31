@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
-import eu.ldob.alice.Benefits;
+import eu.ldob.alice.mode.Benefits;
 
 public class FoodFactoryUtil {
 

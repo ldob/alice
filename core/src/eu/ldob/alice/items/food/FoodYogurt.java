@@ -1,26 +1,30 @@
 package eu.ldob.alice.items.food;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.ldob.alice.items.AFood;
 
 
-public class FoodSpaghetti extends AFood {
+public class FoodYogurt extends AFood {
 
-    private final String NAME = "Spaghetti";
+    private final String NAME = "Joghurt";
 
-    private static final int CALORIC_VALUE = 400;
-    private static final int CARBS_VALUE = 0;
-    private static final int FAT_VALUE = 0;
-    private static final int PROTEIN_VALUE = 0;
-    private static final int VIT_A_VALUE = 10;
+    private static final int CALORIC_VALUE = 145;
+    private static final int CARBS_VALUE = 22;
+    private static final int FAT_VALUE = 5;
+    private static final int PROTEIN_VALUE = 4;
+    private static final int VIT_A_VALUE = 0;
     private static final int VIT_C_VALUE = 0;
     private static final int CALCIUM_VALUE = 0;
     private static final int IRON_VALUE = 0;
 
-    private static final float RADIUS = 0.3f;
+    private static final float SCALE = 0.5f;
 
     private NutritionFacts nutritionFacts;
 
@@ -28,18 +32,19 @@ public class FoodSpaghetti extends AFood {
     private Vector2 velocity;
     private Vector2 acceleration;
 
-    public FoodSpaghetti(Vector2 position, Vector2 acceleration) {
+    private Texture texture;
+    private Sprite sprite;
+
+    public FoodYogurt(Vector2 position, Vector2 acceleration) {
         this.position = position;
         this.acceleration = acceleration;
         this.velocity = new Vector2();
 
-        this.nutritionFacts = new NutritionFacts(CALORIC_VALUE, CARBS_VALUE, FAT_VALUE, PROTEIN_VALUE, VIT_A_VALUE, VIT_C_VALUE, CALCIUM_VALUE, IRON_VALUE);
-    }
+        this.texture = new Texture(Gdx.files.internal("food/yogurt.png"));
+        this.sprite = new Sprite(texture, 0, 0, 128, 128);
+        this.sprite.setScale(SCALE);
 
-    @Override
-    public void render(ShapeRenderer renderer) {
-        renderer.setColor(Color.YELLOW);
-        renderer.circle(position.x, position.y, RADIUS, 16);
+        this.nutritionFacts = new NutritionFacts(CALORIC_VALUE, CARBS_VALUE, FAT_VALUE, PROTEIN_VALUE, VIT_A_VALUE, VIT_C_VALUE, CALCIUM_VALUE, IRON_VALUE);
     }
 
     @Override
@@ -58,8 +63,8 @@ public class FoodSpaghetti extends AFood {
     }
 
     @Override
-    protected float getRadius() {
-        return RADIUS;
+    protected Sprite getSprite() {
+        return sprite;
     }
 
     @Override

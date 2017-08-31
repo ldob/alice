@@ -3,15 +3,16 @@ package eu.ldob.alice.mode;
 import eu.ldob.alice.Constants;
 import eu.ldob.alice.items.factory.FoodFactoryApple;
 import eu.ldob.alice.items.factory.FoodFactoryBurger;
-import eu.ldob.alice.items.factory.FoodFactorySpaghetti;
-import eu.ldob.alice.items.factory.IFoodFactory;
+import eu.ldob.alice.items.factory.FoodFactoryIcecream;
+import eu.ldob.alice.items.factory.FoodFactoryYogurt;
+import eu.ldob.alice.items.IFoodFactory;
 
 
 public enum Mode {
 
-    TIME(Constants.MODE_TIME_LABEL, new IFoodFactory[]{new FoodFactoryApple(0.5f), new FoodFactorySpaghetti(0.6f), new FoodFactoryBurger(0.2f)}, new EvaluationTime()),
-    COLLECT_VITAMINS(Constants.MODE_VITAMINS_LABEL, new IFoodFactory[]{new FoodFactoryApple(0.4f), new FoodFactorySpaghetti(0.8f)}, null),
-    AVOID_FAT(Constants.MODE_FAT_LABEL, new IFoodFactory[]{new FoodFactoryApple(0.4f), new FoodFactorySpaghetti(0.5f), new FoodFactoryBurger(0.3f)}, null);
+    TIME(Constants.MODE_TIME_LABEL, new IFoodFactory[]{new FoodFactoryApple(0.4f), new FoodFactoryYogurt(0.3f), new FoodFactoryIcecream(0.2f), new FoodFactoryBurger(0.3f)}, new EvaluationTime()),
+    COLLECT_VITAMINS(Constants.MODE_VITAMINS_LABEL, new IFoodFactory[]{new FoodFactoryApple(0.4f), new FoodFactoryYogurt(0.3f), new FoodFactoryIcecream(0.2f), new FoodFactoryBurger(0.3f)}, new EvaluationTime()),
+    AVOID_FAT(Constants.MODE_FAT_LABEL, new IFoodFactory[]{new FoodFactoryApple(0.4f), new FoodFactoryYogurt(0.3f), new FoodFactoryIcecream(0.2f), new FoodFactoryBurger(0.3f)}, new EvaluationTime());
 
     private String name;
     private IFoodFactory[] foodFactories;

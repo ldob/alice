@@ -1,24 +1,21 @@
 package eu.ldob.alice.items.food;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.ldob.alice.items.AFood;
 
 
-public class FoodBurger extends AFood {
+public class FoodIcecream extends AFood {
 
-    private final String NAME = "Burger";
+    private final String NAME = "Eis";
 
-    private static final int CALORIC_VALUE = 508;
-    private static final int CARBS_VALUE = 41;
-    private static final int FAT_VALUE = 27;
-    private static final int PROTEIN_VALUE = 26;
+    private static final int CALORIC_VALUE = 236;
+    private static final int CARBS_VALUE = 26;
+    private static final int FAT_VALUE = 14;
+    private static final int PROTEIN_VALUE = 2;
     private static final int VIT_A_VALUE = 0;
     private static final int VIT_C_VALUE = 0;
     private static final int CALCIUM_VALUE = 0;
@@ -35,12 +32,12 @@ public class FoodBurger extends AFood {
     private Texture texture;
     private Sprite sprite;
 
-    public FoodBurger(Vector2 position, Vector2 acceleration) {
+    public FoodIcecream(Vector2 position, Vector2 acceleration) {
         this.position = position;
         this.acceleration = acceleration;
         this.velocity = new Vector2();
 
-        this.texture = new Texture(Gdx.files.internal("food/burger.png"));
+        this.texture = new Texture(Gdx.files.internal("food/icecream.png"));
         this.sprite = new Sprite(texture, 0, 0, 128, 128);
         this.sprite.setScale(SCALE);
 
