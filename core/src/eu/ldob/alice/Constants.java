@@ -5,8 +5,9 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
 
-    public static final float WORLD_SIZE = 12.0f;
-    public static final boolean DEBUG = true;
+    public static final float WORLD_WIDTH = 1200;
+    public static final float WORLD_HEIGHT = 720;
+    public static final boolean DEBUG = false;
 
     public static final Color BACKGROUND_COLOR = new Color(1f, 1f, 1f, 1);
     public static final Color LABEL_COLOR = Color.BLACK;
@@ -42,6 +43,7 @@ public class Constants {
     public static final String SAVE_LABEL = "Speichern";
     public static final String BACK_LABEL = "Zurück";
     public static final String AGAIN_LABEL = "Nochmal";
+    public static final String HIGHSCORE_LABEL = "Highscore";
 
     public static final String BENEFITS_DESCRIPTION = "Was hast du in den letzten 24 Stunden gemacht?";
 
@@ -84,6 +86,8 @@ public class Constants {
 
     public static final String TOTAL_LABEL = "Gesamt";
     public static final String SCORE_LABEL = "Score";
+    public static final String TOTAL_SCORE_LABEL = "Gesamt Score";
+
 
     public static final int INITIAL_FOOD_ARRAY_CAPACITY = 100;
 
@@ -92,4 +96,5 @@ public class Constants {
 
     public static final int PLAYER_SIZE = 256;
     public static final float VELOCITY_SCALE = 7;
+
 }

@@ -3,6 +3,7 @@
     package="eu.ldob.alice" >
 
     <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="26" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:allowBackup="true"

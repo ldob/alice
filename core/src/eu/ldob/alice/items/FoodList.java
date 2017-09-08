@@ -10,18 +10,19 @@ import java.util.Iterator;
 
 import eu.ldob.alice.*;
 import eu.ldob.alice.items.food.FoodType;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import eu.ldob.alice.mode.Benefits;
+import eu.ldob.alice.mode.Mode;
 
 public class FoodList implements Iterable<AFood> {
 
-    private eu.ldob.alice.mode.Mode mode;
-    private eu.ldob.alice.mode.Benefits benefits;
+    private Mode mode;
+    private Benefits benefits;
 
     private DelayedRemovalArray<AFood> foodList;
 
     private Viewport viewport;
 
-    public FoodList(Viewport viewport, eu.ldob.alice.mode.Mode mode, eu.ldob.alice.mode.Benefits benefits) {
+    public FoodList(Viewport viewport, Mode mode, Benefits benefits) {
         this.viewport = viewport;
         this.mode = mode;
         this.benefits = benefits;
@@ -101,7 +102,7 @@ public class FoodList implements Iterable<AFood> {
 
         @Override
         public void remove() {
-            throw new NotImplementedException();
+            throw new IllegalStateException();
         }
     }
 }

@@ -196,8 +196,8 @@ public class EvaluationTime implements IEvaluation {
         tbResult.add(String.valueOf(tnf.getFat()));
         tbResult.add(String.valueOf(tnf.getProteins()));
 
-        
-        tbResult.row().padTop(20);
+
+        tbResult.row();
         tbResult.add().colspan(2);
         tbResult.add(Constants.SCORE_LABEL).right();
         tbResult.add(String.valueOf(this.getCaloricValueScore(tnf.getCaloricValue())));

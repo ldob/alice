@@ -35,17 +35,19 @@ public class Player {
         this.textureMarioRight = new Texture(Gdx.files.internal("player/mario_right.png"));
         this.spriteMarioRight = new Sprite(textureMarioRight, 0, 0, Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
         this.spriteMarioRight.setScale(SCALE);
+        this.spriteMarioRight.setOriginCenter();
 
         this.textureMarioLeft = new Texture(Gdx.files.internal("player/mario_left.png"));
         this.spriteMarioLeft = new Sprite(textureMarioLeft, 0, 0, Constants.PLAYER_SIZE, Constants.PLAYER_SIZE);
         this.spriteMarioLeft.setScale(SCALE);
+        this.spriteMarioLeft.setOriginCenter();
 
         init();
     }
 
     public void init() {
         sprite = this.spriteMarioRight;
-        position = new Vector2(viewport.getWorldWidth() / 2, sprite.getHeight() / 2);
+        position = new Vector2(viewport.getWorldWidth() / 2, -sprite.getHeight()/4);
     }
 
     public void update(float delta) {
@@ -71,11 +73,11 @@ public class Player {
     }
 
     private void ensureInBounds() {
-        if (position.x - sprite.getWidth() < 0) {
-            position.x = sprite.getWidth();
+        if (position.x < 0) {
+            position.x = 0;
         }
-        if (position.x + sprite.getWidth() > viewport.getWorldWidth()) {
-            position.x = viewport.getWorldWidth() - sprite.getWidth();
+        if (position.x > viewport.getWorldWidth()) {
+            position.x = viewport.getWorldWidth();
         }
     }
 

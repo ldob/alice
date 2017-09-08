@@ -42,6 +42,7 @@ public class FoodApple extends AFood {
         this.texture = new Texture(Gdx.files.internal("food/apple.png"));
         this.sprite = new Sprite(texture, 0, 0, 128, 128);
         this.sprite.setScale(SCALE);
+        this.sprite.setOriginCenter();
 
         this.nutritionFacts = new NutritionFacts(CALORIC_VALUE, CARBS_VALUE, FAT_VALUE, PROTEIN_VALUE, VIT_A_VALUE, VIT_C_VALUE, CALCIUM_VALUE, IRON_VALUE);
     }

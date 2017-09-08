@@ -37,7 +37,7 @@ public abstract class AFood {
     }
 
     public boolean removeFromScreen() {
-        return this.getPosition().y < 0;
+        return this.getPosition().y + this.getSprite().getHeight() < 0;
     }
 
     @Override

@@ -17,7 +17,7 @@ import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
 
 
-public class HomeScreen  implements Screen {
+public class HomeScreen implements Screen {
 
     private AliceGame game;
 

@@ -4,18 +4,17 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.items.AFood;
+import eu.ldob.alice.items.PlayerActor;
+import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.mode.Benefits;
 import eu.ldob.alice.items.FoodCounter;
 import eu.ldob.alice.items.FoodList;
@@ -24,75 +23,70 @@ import eu.ldob.alice.items.Player;
 public class GameScreen extends InputAdapter implements Screen {
 
     private AliceGame game;
+
+    private Stage stage;
+    private Skin skin;
+
     private Mode mode;
     private Benefits benefits;
 
-    private float time;
+    private Table tbHud;
+    private Table tbGame;
 
-    private ScreenViewport gameViewport;
-    private SpriteBatch gameBatch;
-
-    private ScreenViewport hudViewport;
-    private SpriteBatch hudBatch;
-
-    private BitmapFont font;
-
-    private Player player;
+    private PlayerActor player;
     private FoodList foodList;
 
     private FoodCounter counter;
+    private float time;
 
-    public GameScreen(AliceGame game, Mode mode, Benefits benefits) {
+    public GameScreen(AliceGame game, Skin skin, Mode mode, Benefits benefits) {
         this.game = game;
+        this.skin = skin;
         this.mode = mode;
         this.benefits = benefits;
     }
 
     @Override
     public void show() {
-        gameViewport = new ScreenViewport();
-        gameBatch = new SpriteBatch();
 
-        hudViewport = new ScreenViewport();
-        hudBatch = new SpriteBatch();
+        stage = new Stage(new ExtendViewport(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT));
+        Gdx.input.setInputProcessor(stage);
 
-        font = new BitmapFont();
-        font.getRegion().getTexture().setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        Table tbRoot = new Table();
+        tbRoot.setFillParent(true);
+        tbRoot.setDebug(Constants.DEBUG);
+        stage.addActor(tbRoot);
 
-        player = new Player(gameViewport, benefits);
-        foodList = new FoodList(gameViewport, mode, benefits);
+        tbHud = new Table(skin);
+        tbGame = new Table(skin);
 
-        Gdx.input.setInputProcessor(this);
+        tbRoot.add(tbHud).right();
+        tbRoot.add(tbGame).expand().left();
 
         time = 0;
-
         counter = new FoodCounter();
+
+        player = new PlayerActor(false, false);
+        //foodList = new FoodListActor();
+
+        //player = new Player(gameViewport, benefits);
+        //foodList = new FoodList(gameViewport, mode, benefits);
     }
 
     @Override
     public void resize(int width, int height) {
-        gameViewport.update(width, height, true);
-        hudViewport.update(width, height, true);
-        font.getData().setScale(Math.min(width, height) / Constants.HUD_FONT_REFERENCE_SCREEN_SIZE);
-        font.setColor(Constants.LABEL_COLOR);
-
-        player.init();
-        foodList.init();
-    }
-
-    @Override
-    public void dispose() {
-
+        stage.getViewport().update(width, height, true);
     }
 
     @Override
     public void render(float delta) {
 
-        foodList.update(delta);
+        //foodList.update(delta);
         player.update(delta);
 
         time += delta;
 
+        /*
         AFood hit = player.hitFood(foodList);
         if(hit != null) {
             counter.add(hit);
@@ -103,26 +97,20 @@ public class GameScreen extends InputAdapter implements Screen {
             game.showResultScreen(time, counter, mode);
             return;
         }
+        */
 
         Gdx.gl.glClearColor(Constants.BACKGROUND_COLOR.r, Constants.BACKGROUND_COLOR.g, Constants.BACKGROUND_COLOR.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        gameViewport.apply(true);
-        gameBatch.setProjectionMatrix(gameViewport.getCamera().combined);
+        tbHud.clear();
+        tbHud.add("hallo");
+        tbHud.row();
+        tbHud.add("welt");
 
-        foodList.draw(gameBatch);
-        player.draw(gameBatch);
+        tbGame.add(player);
 
-
-        hudViewport.apply();
-        hudBatch.setProjectionMatrix(hudViewport.getCamera().combined);
-        hudBatch.begin();
-
-        final String rightHudText = mode.getEvaluation().getHudText(benefits, time, counter);
-        font.getData().markupEnabled = true;
-        font.draw(hudBatch, rightHudText, hudViewport.getWorldWidth() - Constants.HUD_MARGIN, hudViewport.getWorldHeight() - Constants.HUD_MARGIN, 0, Align.right, false);
-
-        hudBatch.end();
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -137,8 +125,12 @@ public class GameScreen extends InputAdapter implements Screen {
 
     @Override
     public void hide() {
-        gameBatch.dispose();
-        hudBatch.dispose();
+        stage.dispose();
+    }
+
+    @Override
+    public void dispose() {
+        stage.dispose();
     }
 
     @Override
