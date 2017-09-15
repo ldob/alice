@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import org.json.JSONArray;
@@ -19,8 +18,6 @@ import org.json.JSONObject;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.items.FoodCounter;
-import eu.ldob.alice.mode.Benefits;
 import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.rest.AliceHttpListener;
 import eu.ldob.alice.rest.AliceHttpRequest;
@@ -135,7 +132,7 @@ public class HighscoreScreen implements Screen {
     public void render(float delta) {
 
         if(!lockRendering) {
-            Gdx.gl.glClearColor(Constants.BACKGROUND_COLOR.r, Constants.BACKGROUND_COLOR.g, Constants.BACKGROUND_COLOR.b, 1);
+            Gdx.gl.glClearColor(Constants.BACKGROUND_COLOR_WHITE.r, Constants.BACKGROUND_COLOR_WHITE.g, Constants.BACKGROUND_COLOR_WHITE.b, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
             stage.act(delta);

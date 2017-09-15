@@ -33,7 +33,9 @@ public interface IEvaluation {
     int getCalciumScore(int calcium);
     int getIronScore(int iron);
 
-    String getHudText(Benefits benefits, float time, FoodCounter foodCounter);
+    Table getHudTable(Skin skin, Benefits benefits);
+    void updateHudTable(float time, FoodCounter foodCounter);
+
     Table getResultTable(Skin skin, Benefits benefits, float time, FoodCounter foodCounter);
 
     enum GameOverReason {

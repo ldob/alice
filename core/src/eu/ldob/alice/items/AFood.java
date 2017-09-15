@@ -1,5 +1,6 @@
 package eu.ldob.alice.items;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -14,7 +15,8 @@ public abstract class AFood {
     protected abstract Vector2 getVelocity();
     protected abstract Vector2 getAcceleration();
     protected abstract Sprite getSprite();
-
+    protected abstract float getScaledWidth();
+    protected abstract float getScaledHeight();
 
     public abstract NutritionFacts getNutritionFacts();
 
@@ -28,12 +30,8 @@ public abstract class AFood {
         this.getPosition().mulAdd(this.getVelocity(), delta);
     }
 
-    public void draw(SpriteBatch batch) {
-        this.getSprite().setPosition(this.getPosition().x, this.getPosition().y);
-
-        batch.begin();
-        this.getSprite().draw(batch);
-        batch.end();
+    public void draw(Batch batch) {
+        batch.draw(this.getSprite().getTexture(), this.getPosition().x, this.getPosition().y, this.getScaledWidth(), this.getScaledHeight());
     }
 
     public boolean removeFromScreen() {

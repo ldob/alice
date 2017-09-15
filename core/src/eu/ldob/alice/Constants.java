@@ -5,11 +5,12 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
 
-    public static final float WORLD_WIDTH = 1200;
+    public static final float WORLD_WIDTH = 1280;
     public static final float WORLD_HEIGHT = 720;
     public static final boolean DEBUG = false;
 
-    public static final Color BACKGROUND_COLOR = new Color(1f, 1f, 1f, 1);
+    public static final Color BACKGROUND_COLOR_WHITE = new Color(1f, 1f, 1f, 1);
+    public static final Color BACKGROUND_COLOR_BLACK = new Color(0f, 0f, 0f, 1);
     public static final Color LABEL_COLOR = Color.BLACK;
 
     //public static final String SKIN = "skins/glassy/glassy-ui.json";
@@ -20,13 +21,12 @@ public class Constants {
     //public static final String DEFAULT_HEX_COLOR = "[#212121]";
     public static final String DEFAULT_HEX_COLOR = "[#33691E]";
 
-    public static final float PLAYER_HEAD_RADIUS = 0.5f;
-    public static final float PLAYER_HEAD_HEIGHT = 4.0f * PLAYER_HEAD_RADIUS;
-    public static final float PLAYER_LIMB_WIDTH = 0.1f;
-    public static final int PLAYER_HEAD_SEGMENTS = 20;
-    public static final Color PLAYER_COLOR = Color.BLACK;
+    public static final Color SCORE_ERROR_COLOR = new Color(1f, 0f, 0f, 1f);
+    public static final Color SCORE_WARN_COLOR = new Color(1f, 1f, 0f, 1f);
+    public static final Color SCORE_GOOD_COLOR = new Color(0f, 1f, 0f, 1f);
+    public static final Color SCORE_DEFAULT_COLOR = new Color(1f, 1f, 1f, 1f);
 
-    public static final float ACCELEROMETER_SENSITIVITY = 0.4f;
+    public static final float ACCELEROMETER_SENSITIVITY = 0.1f;
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
 
     public static final float HUD_FONT_REFERENCE_SCREEN_SIZE = 480.0f;
@@ -59,12 +59,8 @@ public class Constants {
     public static final String MODE_FAT_LABEL = "Flucht vor Fett";
 
     public static final float HOME_WORLD_SIZE = 600.0f;
-    public static final float BUTTON_BUBBLE_RADIUS = HOME_WORLD_SIZE / 9;
 
-    public static final float LABEL_SCALE_SMALL = 0.8f;
-    public static final float LABEL_SCALE_MEDIUM = 1.2f;
-    public static final float LABEL_SCALE_LARGE = 1.6f;
-
+    public static final String SCORE_VALUE_SEPERATOR = " / ";
     public static final String SCORE_TIME_LABEL = "Zeit: ";
     public static final String SCORE_TIME_UNIT = " sek";
     public static final String SCORE_CALORIC_VALUE_LABEL = "Brennwert: ";
@@ -94,7 +90,7 @@ public class Constants {
 
 
 
-    public static final int PLAYER_SIZE = 256;
+    public static final int PLAYER_SIZE = 100;
     public static final float VELOCITY_SCALE = 7;
 
 }

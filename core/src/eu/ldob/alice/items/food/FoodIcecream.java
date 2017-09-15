@@ -66,6 +66,16 @@ public class FoodIcecream extends AFood {
     }
 
     @Override
+    protected float getScaledWidth() {
+        return sprite.getWidth() * SCALE;
+    }
+
+    @Override
+    protected float getScaledHeight() {
+        return sprite.getHeight() * SCALE;
+    }
+
+    @Override
     public String getName() {
         return NAME;
     }

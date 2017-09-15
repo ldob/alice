@@ -10,7 +10,6 @@ import eu.ldob.alice.mode.Benefits;
 import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.screen.BenefitsScreen;
 import eu.ldob.alice.screen.GameScreen;
-import eu.ldob.alice.screen.GameScreenOld;
 import eu.ldob.alice.screen.HighscoreScreen;
 import eu.ldob.alice.screen.HomeScreen;
 import eu.ldob.alice.screen.ModeScreen;
@@ -43,8 +42,8 @@ public class AliceGame extends Game {
 	}
 
 	public void showGameScreen(Mode mode) {
-		//setScreen(new GameScreen(this, skin, mode, benefits));
-		setScreen(new GameScreenOld(this, mode, benefits));
+		setScreen(new GameScreen(this, skin, mode, benefits));
+		//setScreen(new GameScreenOld(this, mode, benefits));
 	}
 
 	public void showResultScreen(float time, FoodCounter counter, Mode mode) {
