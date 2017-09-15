@@ -5,34 +5,36 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
 
-    public static final float WORLD_WIDTH = 1280;
-    public static final float WORLD_HEIGHT = 720;
     public static final boolean DEBUG = false;
 
-    public static final Color BACKGROUND_COLOR_WHITE = new Color(1f, 1f, 1f, 1);
-    public static final Color BACKGROUND_COLOR_BLACK = new Color(0f, 0f, 0f, 1);
-    public static final Color LABEL_COLOR = Color.BLACK;
+    public static final float WORLD_WIDTH = 1280;
+    public static final float WORLD_HEIGHT = 720;
+
+    public static final int PLAYER_WIDTH = 100;
+    public static final int PLAYER_HEIGHT = 100;
 
     //public static final String SKIN = "skins/glassy/glassy-ui.json";
     public static final String SKIN = "skins/android/uiskin.json";
 
-    public static final String ERROR_HEX_COLOR = "[#B71C1C]";
-    public static final String WARN_HEX_COLOR = "[#F57F17]";
-    //public static final String DEFAULT_HEX_COLOR = "[#212121]";
-    public static final String DEFAULT_HEX_COLOR = "[#33691E]";
+    public static final Color BACKGROUND_COLOR_WHITE = new Color(1f, 1f, 1f, 1f);
+    public static final Color BACKGROUND_COLOR_BLACK = new Color(0f, 0f, 0f, 1f);
 
     public static final Color SCORE_ERROR_COLOR = new Color(1f, 0f, 0f, 1f);
     public static final Color SCORE_WARN_COLOR = new Color(1f, 1f, 0f, 1f);
     public static final Color SCORE_GOOD_COLOR = new Color(0f, 1f, 0f, 1f);
-    public static final Color SCORE_DEFAULT_COLOR = new Color(1f, 1f, 1f, 1f);
+    public static final Color SCORE_DEFAULT_COLOR = new Color(0f, 0f, 0f, 1f);
 
-    public static final float ACCELEROMETER_SENSITIVITY = 0.1f;
+    public static final float ACCELEROMETER_SENSITIVITY = 0.5f;
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
 
-    public static final float HUD_FONT_REFERENCE_SCREEN_SIZE = 480.0f;
-    public static final float HUD_MARGIN = 20.0f;
+    public static final float PLAYER_VELOCITY_SCALE = 500;
+    public static final float FOOD_VELOCITY_SCALE = 7;
+
+    public static final float JUMP_TIME = 750f;
+    public static final float JUMP_SCALE = 3f;
 
     public static final String HOME_LABEL = "ALICE";
+    public static final String LOADING_LABEL = "Loading";
     public static final String PLAY_LABEL = "Los!";
     public static final String BENEFITS_LABEL = "Leistungen";
     public static final String MODE_LABEL = "Spielmodus";
@@ -44,6 +46,9 @@ public class Constants {
     public static final String BACK_LABEL = "Zurück";
     public static final String AGAIN_LABEL = "Nochmal";
     public static final String HIGHSCORE_LABEL = "Highscore";
+
+    public static final String NAME_LABEL = "Name";
+    public static final String SOUND_LABEL = "Ton";
 
     public static final String BENEFITS_DESCRIPTION = "Was hast du in den letzten 24 Stunden gemacht?";
 
@@ -57,8 +62,6 @@ public class Constants {
     public static final String MODE_TIME_LABEL = "Spiel auf Zeit";
     public static final String MODE_VITAMINS_LABEL = "Hol dir Vitamine";
     public static final String MODE_FAT_LABEL = "Flucht vor Fett";
-
-    public static final float HOME_WORLD_SIZE = 600.0f;
 
     public static final String SCORE_VALUE_SEPERATOR = " / ";
     public static final String SCORE_TIME_LABEL = "Zeit: ";
@@ -84,13 +87,5 @@ public class Constants {
     public static final String SCORE_LABEL = "Score";
     public static final String TOTAL_SCORE_LABEL = "Gesamt Score";
 
-
     public static final int INITIAL_FOOD_ARRAY_CAPACITY = 100;
-
-
-
-
-    public static final int PLAYER_SIZE = 100;
-    public static final float VELOCITY_SCALE = 7;
-
 }

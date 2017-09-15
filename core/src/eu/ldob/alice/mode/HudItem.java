@@ -8,13 +8,19 @@ import eu.ldob.alice.Constants;
 
 public class HudItem {
 
+    private Formatting formatting;
+    private float target;
+
     protected final Label lbName;
     protected final Label lbValue;
     protected final Label lbSeparator;
     protected final Label lbTarget;
     protected final Label lbUnit;
 
-    protected HudItem(Label.LabelStyle style, String name, float target, String unit) {
+    protected HudItem(Label.LabelStyle style, String name, float target, String unit, Formatting formatting) {
+
+        this.formatting = formatting;
+        this.target = target;
 
         lbName = new Label(name, style);
         lbValue = new Label("", style);
@@ -29,13 +35,26 @@ public class HudItem {
         lbUnit.setAlignment(Align.left);
     }
 
-    public void update(float value, Formatting formatting) {
+    public void update(float value) {
 
         lbValue.setText(String.valueOf(MathUtils.round(value)));
 
-        if (
-            formatting == Formatting.NEGATIVE
-        ) {
+        if(formatting == Formatting.NONE) {
+            lbName.setColor(Constants.SCORE_DEFAULT_COLOR);
+            lbValue.setColor(Constants.SCORE_DEFAULT_COLOR);
+            lbSeparator.setColor(Constants.SCORE_DEFAULT_COLOR);
+            lbTarget.setColor(Constants.SCORE_DEFAULT_COLOR);
+            lbUnit.setColor(Constants.SCORE_DEFAULT_COLOR);
+        }
+        else if (
+                formatting == Formatting.POSITIVE && value > target * 0.9f
+                ||
+                formatting == Formatting.NEUTRAL && value < target * 0.5f
+                ||
+                formatting == Formatting.NEUTRAL && value > target * 1.2f
+                ||
+                formatting == Formatting.NEGATIVE && value > target * 0.8f
+                ) {
             lbName.setColor(Constants.SCORE_ERROR_COLOR);
             lbValue.setColor(Constants.SCORE_ERROR_COLOR);
             lbSeparator.setColor(Constants.SCORE_ERROR_COLOR);
@@ -43,17 +62,12 @@ public class HudItem {
             lbUnit.setColor(Constants.SCORE_ERROR_COLOR);
         }
         else if (
-            formatting == Formatting.NEUTRAL
-        ) {
-            lbName.setColor(Constants.SCORE_WARN_COLOR);
-            lbValue.setColor(Constants.SCORE_WARN_COLOR);
-            lbSeparator.setColor(Constants.SCORE_WARN_COLOR);
-            lbTarget.setColor(Constants.SCORE_WARN_COLOR);
-            lbUnit.setColor(Constants.SCORE_WARN_COLOR);
-        }
-        else if (
-                formatting == Formatting.POSITIVE
-        ) {
+                formatting == Formatting.POSITIVE && value < target * 0.5f
+                ||
+                formatting == Formatting.NEUTRAL && value < target * 1.1f && value > target * 0.8f
+                ||
+                formatting == Formatting.NEGATIVE && value < target * 0.5f
+                ) {
             lbName.setColor(Constants.SCORE_GOOD_COLOR);
             lbValue.setColor(Constants.SCORE_GOOD_COLOR);
             lbSeparator.setColor(Constants.SCORE_GOOD_COLOR);
@@ -61,11 +75,11 @@ public class HudItem {
             lbUnit.setColor(Constants.SCORE_GOOD_COLOR);
         }
         else {
-            lbName.setColor(Constants.SCORE_DEFAULT_COLOR);
-            lbValue.setColor(Constants.SCORE_DEFAULT_COLOR);
-            lbSeparator.setColor(Constants.SCORE_DEFAULT_COLOR);
-            lbTarget.setColor(Constants.SCORE_DEFAULT_COLOR);
-            lbUnit.setColor(Constants.SCORE_DEFAULT_COLOR);
+            lbName.setColor(Constants.SCORE_WARN_COLOR);
+            lbValue.setColor(Constants.SCORE_WARN_COLOR);
+            lbSeparator.setColor(Constants.SCORE_WARN_COLOR);
+            lbTarget.setColor(Constants.SCORE_WARN_COLOR);
+            lbUnit.setColor(Constants.SCORE_WARN_COLOR);
         }
     }
 

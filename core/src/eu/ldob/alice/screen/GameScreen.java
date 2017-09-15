@@ -2,6 +2,8 @@ package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,6 +16,7 @@ import eu.ldob.alice.Constants;
 import eu.ldob.alice.items.AFood;
 import eu.ldob.alice.items.FoodActor;
 import eu.ldob.alice.items.PlayerActor;
+import eu.ldob.alice.items.food.FoodType;
 import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.mode.Benefits;
 import eu.ldob.alice.items.FoodCounter;
@@ -28,6 +31,8 @@ public class GameScreen implements Screen {
     private Mode mode;
     private Benefits benefits;
 
+    private Music music;
+
     private Table tbHud;
 
     private PlayerActor player;
@@ -39,16 +44,27 @@ public class GameScreen implements Screen {
     private Texture background;
     private Texture backgroundGameOver;
 
+    private Sound soundHealthyHit;
+    private Sound soundNeutralHit;
+    private Sound soundJunkHit;
+    private Sound soundGameOver;
+
     private long gameOverTime = -1;
 
-    public GameScreen(AliceGame game, Skin skin, Mode mode, Benefits benefits) {
+    public GameScreen(AliceGame game, Skin skin, Mode mode, Benefits benefits, Music music) {
         this.game = game;
         this.skin = skin;
         this.mode = mode;
         this.benefits = benefits;
+        this.music = music;
 
         this.background = new Texture(Gdx.files.internal("background/background.png"));
         this.backgroundGameOver = new Texture(Gdx.files.internal("background/background_gameover.png"));
+
+        this.soundHealthyHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_healthy.wav"));
+        this.soundNeutralHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_neutral.wav"));
+        this.soundJunkHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_junk.wav"));
+        this.soundGameOver = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.wav"));
     }
 
     @Override
@@ -70,6 +86,9 @@ public class GameScreen implements Screen {
 
         player = new PlayerActor(false, false);
         food = new FoodActor(mode, benefits);
+
+        stage.addActor(food);
+        stage.addActor(player);
     }
 
     @Override
@@ -87,6 +106,8 @@ public class GameScreen implements Screen {
             if(gameOverTime == -1) {
                 gameOverTime = System.currentTimeMillis();
                 background = backgroundGameOver;
+                music.setVolume(0.02f);
+                soundGameOver.play();
             }
             else if(System.currentTimeMillis() - gameOverTime > 3000) {
                 game.showResultScreen(time, counter, mode);
@@ -101,15 +122,22 @@ public class GameScreen implements Screen {
             for (AFood hit : player.hitFood(food)) {
                 counter.add(hit);
                 food.removeValue(hit);
+
+                if(hit.getFoodType() == FoodType.HEALTHY) {
+                    soundHealthyHit.play(0.5f);
+                }
+                else if(hit.getFoodType() == FoodType.JUNK) {
+                    soundJunkHit.play(0.5f);
+                }
+                else {
+                    soundNeutralHit.play(0.5f);
+                }
             }
         }
 
         stage.getBatch().begin();
         stage.getBatch().draw(background, 0, 0, Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT);
         stage.getBatch().end();
-
-        stage.addActor(food);
-        stage.addActor(player);
 
         mode.getEvaluation().updateHudTable(time, counter);
 
@@ -129,11 +157,23 @@ public class GameScreen implements Screen {
 
     @Override
     public void hide() {
-        stage.dispose();
+        disposeAll();
     }
 
     @Override
     public void dispose() {
+        disposeAll();
+    }
+
+    private void disposeAll() {
         stage.dispose();
+
+        background.dispose();
+        backgroundGameOver.dispose();
+
+        soundHealthyHit.dispose();
+        soundNeutralHit.dispose();
+        soundJunkHit.dispose();
+        soundGameOver.dispose();
     }
 }

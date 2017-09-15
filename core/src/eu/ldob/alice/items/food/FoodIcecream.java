@@ -21,26 +21,25 @@ public class FoodIcecream extends AFood {
     private static final int CALCIUM_VALUE = 0;
     private static final int IRON_VALUE = 0;
 
-    private static final float SCALE = 0.7f;
+    private static final float WIDTH = 86;
+    private static final float HEIGHT = 86;
 
     private NutritionFacts nutritionFacts;
 
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
+    private FoodType foodType;
 
     private Texture texture;
-    private Sprite sprite;
 
-    public FoodIcecream(Vector2 position, Vector2 acceleration) {
+    public FoodIcecream(FoodType foodType, Vector2 position, Vector2 acceleration) {
+        this.foodType = foodType;
         this.position = position;
         this.acceleration = acceleration;
         this.velocity = new Vector2();
 
         this.texture = new Texture(Gdx.files.internal("food/icecream.png"));
-        this.sprite = new Sprite(texture, 0, 0, 128, 128);
-        this.sprite.setScale(SCALE);
-        this.sprite.setOriginCenter();
 
         this.nutritionFacts = new NutritionFacts(CALORIC_VALUE, CARBS_VALUE, FAT_VALUE, PROTEIN_VALUE, VIT_A_VALUE, VIT_C_VALUE, CALCIUM_VALUE, IRON_VALUE);
     }
@@ -61,23 +60,28 @@ public class FoodIcecream extends AFood {
     }
 
     @Override
-    protected Sprite getSprite() {
-        return sprite;
+    protected Texture getTexture() {
+        return texture;
     }
 
     @Override
-    protected float getScaledWidth() {
-        return sprite.getWidth() * SCALE;
+    protected float getWidth() {
+        return WIDTH;
     }
 
     @Override
-    protected float getScaledHeight() {
-        return sprite.getHeight() * SCALE;
+    protected float getHeight() {
+        return HEIGHT;
     }
 
     @Override
     public String getName() {
         return NAME;
+    }
+
+    @Override
+    public FoodType getFoodType() {
+        return foodType;
     }
 
     @Override

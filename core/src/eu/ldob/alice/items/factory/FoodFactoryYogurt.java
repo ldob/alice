@@ -14,6 +14,8 @@ import eu.ldob.alice.items.food.FoodType;
 
 public class FoodFactoryYogurt implements eu.ldob.alice.items.IFoodFactory {
 
+    private static final FoodType FOOD_TYPE = FoodType.NEUTRAL;
+
     private float spawnRate;
     private Map<Acceleration,Vector2> accelerations = new HashMap<Acceleration, Vector2>();
 
@@ -30,7 +32,7 @@ public class FoodFactoryYogurt implements eu.ldob.alice.items.IFoodFactory {
 
     @Override
     public AFood generate(Benefits benefits, Vector2 position) {
-        return new FoodYogurt(position, FoodFactoryUtil.getAcceleration(benefits, accelerations));
+        return new FoodYogurt(FOOD_TYPE, position, FoodFactoryUtil.getAcceleration(benefits, accelerations));
     }
 
     @Override
@@ -40,6 +42,6 @@ public class FoodFactoryYogurt implements eu.ldob.alice.items.IFoodFactory {
 
     @Override
     public FoodType getFoodType() {
-        return FoodType.NEUTRAL;
+        return FOOD_TYPE;
     }
 }

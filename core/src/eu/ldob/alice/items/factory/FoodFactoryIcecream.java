@@ -14,6 +14,8 @@ import eu.ldob.alice.mode.Benefits;
 
 public class FoodFactoryIcecream implements eu.ldob.alice.items.IFoodFactory {
 
+    private static final FoodType FOOD_TYPE = FoodType.JUNK;
+
     private float spawnRate;
     private Map<Acceleration,Vector2> accelerations = new HashMap<Acceleration, Vector2>();
 
@@ -30,7 +32,7 @@ public class FoodFactoryIcecream implements eu.ldob.alice.items.IFoodFactory {
 
     @Override
     public AFood generate(Benefits benefits, Vector2 position) {
-        return new FoodIcecream(position, FoodFactoryUtil.getAcceleration(benefits, accelerations));
+        return new FoodIcecream(FOOD_TYPE, position, FoodFactoryUtil.getAcceleration(benefits, accelerations));
     }
 
     @Override
@@ -40,6 +42,6 @@ public class FoodFactoryIcecream implements eu.ldob.alice.items.IFoodFactory {
 
     @Override
     public FoodType getFoodType() {
-        return FoodType.JUNK;
+        return FOOD_TYPE;
     }
 }

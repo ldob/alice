@@ -1,12 +1,11 @@
 package eu.ldob.alice.items;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.ldob.alice.Constants;
+import eu.ldob.alice.items.food.FoodType;
 import eu.ldob.alice.items.food.NutritionFacts;
 
 public abstract class AFood {
@@ -14,10 +13,11 @@ public abstract class AFood {
     protected abstract Vector2 getPosition();
     protected abstract Vector2 getVelocity();
     protected abstract Vector2 getAcceleration();
-    protected abstract Sprite getSprite();
-    protected abstract float getScaledWidth();
-    protected abstract float getScaledHeight();
+    protected abstract Texture getTexture();
+    protected abstract float getWidth();
+    protected abstract float getHeight();
 
+    public abstract FoodType getFoodType();
     public abstract NutritionFacts getNutritionFacts();
 
 
@@ -26,16 +26,16 @@ public abstract class AFood {
     }
 
     public void update(float delta) {
-        this.getVelocity().mulAdd(this.getAcceleration(), delta * Constants.VELOCITY_SCALE);
+        this.getVelocity().mulAdd(this.getAcceleration(), delta * Constants.FOOD_VELOCITY_SCALE);
         this.getPosition().mulAdd(this.getVelocity(), delta);
     }
 
     public void draw(Batch batch) {
-        batch.draw(this.getSprite().getTexture(), this.getPosition().x, this.getPosition().y, this.getScaledWidth(), this.getScaledHeight());
+        batch.draw(this.getTexture(), this.getPosition().x, this.getPosition().y, this.getWidth(), this.getHeight());
     }
 
     public boolean removeFromScreen() {
-        return this.getPosition().y + this.getSprite().getHeight() < 0;
+        return this.getPosition().y + this.getHeight() < 0;
     }
 
     @Override

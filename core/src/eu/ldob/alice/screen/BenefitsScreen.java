@@ -81,6 +81,7 @@ public class BenefitsScreen implements Screen {
         final TextButton btSave = new TextButton(Constants.SAVE_LABEL, skin);
 
         tbBenefits.add(lbDescription).fillX().colspan(2);
+
         tbBenefits.row().padTop(25);
         tbBenefits.add(lbFast).left();
         tbBenefits.add(cbFast);
@@ -99,6 +100,7 @@ public class BenefitsScreen implements Screen {
         tbBenefits.row();
         tbBenefits.add(lbJunk).left();
         tbBenefits.add(cbJunk);
+
         tbBenefits.row().padTop(25);
         tbBenefits.add(btBack).left();
         tbBenefits.add(btSave).right();

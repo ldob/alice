@@ -2,7 +2,6 @@ package eu.ldob.alice.mode;
 
 
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -19,6 +18,7 @@ import eu.ldob.alice.items.food.NutritionFacts;
 public class EvaluationTime implements IEvaluation {
 
     private List<HudItem> hudItems;
+    private HudItem hiTime;
     private HudItem hiCaloricValue;
     private HudItem hiCarbs;
     private HudItem hiFat;
@@ -134,16 +134,19 @@ public class EvaluationTime implements IEvaluation {
 
         hudItems = new ArrayList<HudItem>();
 
-        hiCaloricValue = new HudItem(labelStyle, Constants.SCORE_CALORIC_VALUE_LABEL, CALORIC_VALUE_TARGET * benefits.getCaloricValueFactor(), Constants.SCORE_CALORIC_VALUE_UNIT);
+        hiTime = new HudItem(labelStyle, Constants.SCORE_TIME_LABEL, TIME_TARGET, Constants.SCORE_TIME_UNIT, HudItem.Formatting.NEGATIVE);
+        hudItems.add(hiTime);
+
+        hiCaloricValue = new HudItem(labelStyle, Constants.SCORE_CALORIC_VALUE_LABEL, CALORIC_VALUE_TARGET * benefits.getCaloricValueFactor(), Constants.SCORE_CALORIC_VALUE_UNIT, HudItem.Formatting.NEUTRAL);
         hudItems.add(hiCaloricValue);
 
-        hiCarbs = new HudItem(labelStyle, Constants.SCORE_CARBS_LABEL, CARBS_TARGET, Constants.SCORE_CARBS_UNIT);
+        hiCarbs = new HudItem(labelStyle, Constants.SCORE_CARBS_LABEL, CARBS_TARGET, Constants.SCORE_CARBS_UNIT, HudItem.Formatting.NEUTRAL);
         hudItems.add(hiCarbs);
 
-        hiFat = new HudItem(labelStyle, Constants.SCORE_FAT_LABEL, FAT_TARGET, Constants.SCORE_FAT_UNIT);
+        hiFat = new HudItem(labelStyle, Constants.SCORE_FAT_LABEL, FAT_TARGET, Constants.SCORE_FAT_UNIT, HudItem.Formatting.NEGATIVE);
         hudItems.add(hiFat);
 
-        hiProteins = new HudItem(labelStyle, Constants.SCORE_PROTEINS_LABEL, PROTEINS_TARGET, Constants.SCORE_PROTEINS_UNIT);
+        hiProteins = new HudItem(labelStyle, Constants.SCORE_PROTEINS_LABEL, PROTEINS_TARGET, Constants.SCORE_PROTEINS_UNIT, HudItem.Formatting.POSITIVE);
         hudItems.add(hiProteins);
 
         for(HudItem hudItem : hudItems) {
@@ -157,55 +160,6 @@ public class EvaluationTime implements IEvaluation {
 
         tbHud.padRight(30).padTop(15);
 
-
-        /*
-        final Label lbCarbs = new Label("Kohlenhydrate: ", skin);
-        final Label lbCarbsUnit = new Label(" g", skin);
-        lbCarbs.setAlignment(Align.right);
-
-        final Label lbFat = new Label("Fett: ", skin);
-        final Label lbFatUnit = new Label(" g", skin);
-        lbFat.setAlignment(Align.right);
-
-        final Label lbProteins = new Label("Proteine: ", skin);
-        final Label lbProteinsUnit = new Label(" g", skin);
-        lbProteins.setAlignment(Align.right);
-
-
-
-        StringBuilder sb = new StringBuilder();
-
-        sb.append((time > TIME_TARGET - 5) ? Constants.ERROR_HEX_COLOR : ((time > TIME_TARGET - 15) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_TIME_LABEL + MathUtils.round(time) + " / " + TIME_TARGET + Constants.SCORE_TIME_UNIT + "\n");
-
-        float caloricValue = ;
-        sb.append((totalNutritionFacts.getCaloricValue() > caloricValue) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getCaloricValue() > caloricValue * 0.8f) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_CALORIC_VALUE_LABEL +  + " / " + MathUtils.round(caloricValue) + Constants.SCORE_CALORIC_VALUE_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getCarbs() < CARBS_TARGET * 0.8f) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getCarbs() < CARBS_TARGET) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_CARBS_LABEL + totalNutritionFacts.getCarbs() + " / " + CARBS_TARGET + Constants.SCORE_CARBS_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getFat() > FAT_TARGET) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getFat() > FAT_TARGET * 0.8f) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_FAT_LABEL + totalNutritionFacts.getFat() + " / " + FAT_TARGET + Constants.SCORE_FAT_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getProteins() < PROTEINS_TARGET * 0.8f) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getProteins() < PROTEINS_TARGET) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_PROTEINS_LABEL + totalNutritionFacts.getProteins() + " / " + PROTEINS_TARGET + Constants.SCORE_PROTEINS_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getVitaminA() < VITAMIN_A_TARGET * 0.8f) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getVitaminA() < VITAMIN_A_TARGET) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_VITAMIN_A_LABEL + totalNutritionFacts.getVitaminA() + " / " + VITAMIN_A_TARGET + Constants.SCORE_VITAMIN_A_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getVitaminC() < VITAMIN_C_TARGET * 0.8f) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getVitaminC() < VITAMIN_C_TARGET) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_VITAMIN_C_LABEL + totalNutritionFacts.getVitaminC() + " / " + VITAMIN_C_TARGET + Constants.SCORE_VITAMIN_C_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getCalcium() < CALCIUM_TARGET * 0.8f) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getCalcium() < CALCIUM_TARGET) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_CALCIUM_LABEL + totalNutritionFacts.getCalcium() + " / " + CALCIUM_TARGET + Constants.SCORE_CALCIUM_UNIT + "\n");
-
-        sb.append((totalNutritionFacts.getIron() < IRON_TARGET * 0.8f) ? Constants.ERROR_HEX_COLOR : ((totalNutritionFacts.getIron() < IRON_TARGET) ? Constants.WARN_HEX_COLOR : Constants.DEFAULT_HEX_COLOR));
-        sb.append(Constants.SCORE_IRON_LABEL + totalNutritionFacts.getIron() + " / " + IRON_TARGET + Constants.SCORE_IRON_UNIT);
-
-        return sb.toString();
-        */
-
         return tbHud;
     }
 
@@ -214,10 +168,11 @@ public class EvaluationTime implements IEvaluation {
 
         NutritionFacts totalNutritionFacts = foodCounter.getTotalNutritionFacts();
 
-        hiCaloricValue.update(totalNutritionFacts.getCaloricValue(), HudItem.Formatting.NONE);
-        hiCarbs.update(totalNutritionFacts.getCarbs(), HudItem.Formatting.NONE);
-        hiFat.update(totalNutritionFacts.getFat(), HudItem.Formatting.NONE);
-        hiProteins.update(totalNutritionFacts.getProteins(), HudItem.Formatting.NONE);
+        hiTime.update(time);
+        hiCaloricValue.update(totalNutritionFacts.getCaloricValue());
+        hiCarbs.update(totalNutritionFacts.getCarbs());
+        hiFat.update(totalNutritionFacts.getFat());
+        hiProteins.update(totalNutritionFacts.getProteins());
     }
 
     @Override

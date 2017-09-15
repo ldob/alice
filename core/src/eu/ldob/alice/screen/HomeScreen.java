@@ -74,6 +74,13 @@ public class HomeScreen implements Screen {
             }
         });
 
+        btSettings.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.showSettingsScreen();
+            }
+        });
+
         btExit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
