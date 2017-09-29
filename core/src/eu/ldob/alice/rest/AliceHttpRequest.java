@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.*;
 
 import eu.ldob.alice.mode.Mode;
+import eu.ldob.alice.util.SettingsStorage;
 
 public class AliceHttpRequest {
 
@@ -46,7 +47,7 @@ public class AliceHttpRequest {
 
     public void setScore(Mode mode, int score, final AliceHttpListener listener) {
         HttpRequest http = new HttpRequest(HttpMethods.GET);
-        http.setUrl(BASE_URL + "setScore.php?mode=" + mode.toString() + "&player=Test&score=" + score);
+        http.setUrl(BASE_URL + "setScore.php?mode=" + mode.toString() + "&player=" + SettingsStorage.getPlayerName() + "&score=" + score);
 
         Gdx.net.sendHttpRequest(http, new HttpResponseListener() {
 

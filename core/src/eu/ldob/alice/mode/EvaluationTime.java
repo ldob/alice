@@ -1,11 +1,14 @@
 package eu.ldob.alice.mode;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
+import com.badlogic.gdx.utils.async.AsyncTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,7 +180,7 @@ public class EvaluationTime implements IEvaluation {
 
     @Override
     public Table getResultTable(Skin skin, Benefits benefits, float time, FoodCounter foodCounter) {
-        Table tbResult = new Table(skin);
+        final Table tbResult = new Table(skin);
 
         final Label lbCaloricValue = new Label("Brennwert\n[kcal]", skin);
         lbCaloricValue.setAlignment(Align.center);
@@ -223,10 +226,106 @@ public class EvaluationTime implements IEvaluation {
         tbResult.row();
         tbResult.add().colspan(2);
         tbResult.add(Constants.SCORE_LABEL).right();
-        tbResult.add(String.valueOf(this.getCaloricValueScore(tnf.getCaloricValue())));
-        tbResult.add(String.valueOf(this.getCarbsScore(tnf.getCarbs())));
-        tbResult.add(String.valueOf(this.getFatScore(tnf.getFat())));
-        tbResult.add(String.valueOf(this.getProteinsScore(tnf.getProteins())));
+
+        final Label lbScoreCaloricValue = new Label("???", skin);
+        final int scoreCaloricValue = this.getCaloricValueScore(tnf.getCaloricValue());
+        tbResult.add(lbScoreCaloricValue);
+
+        final Label lbScoreCarbs = new Label("???", skin);
+        final int scoreCarbs = this.getCarbsScore(tnf.getCarbs());
+        tbResult.add(lbScoreCarbs);
+
+        final Label lbScoreFat = new Label("???", skin);
+        final int scoreFat = this.getFatScore(tnf.getFat());
+        tbResult.add(lbScoreFat);
+
+        final Label lbScoreProteins = new Label("???", skin);
+        final int scoreProteins = this.getProteinsScore(tnf.getProteins());
+        tbResult.add(lbScoreProteins);
+
+
+        AsyncExecutor scoreUpdate = new AsyncExecutor(10);
+
+        scoreUpdate.submit(new AsyncTask<Void>() {
+
+            @Override
+            public Void call() throws Exception {
+                try {
+                    Thread.sleep(2000);
+
+                    for(int counter = 0; counter < scoreCaloricValue; counter += 10) {
+                        lbScoreCaloricValue.setText(String.valueOf(counter));
+                        Thread.sleep(20);
+                    }
+                    lbScoreCaloricValue.setText(String.valueOf(scoreCaloricValue));
+                    if(scoreCaloricValue > Constants.MAXIMUM_SCORE * 0.9) {
+                        lbScoreCaloricValue.setColor(Constants.SCORE_GOOD_COLOR);
+                    }
+                    else if(scoreCaloricValue > Constants.MAXIMUM_SCORE * 0.6) {
+                        lbScoreCaloricValue.setColor(Constants.SCORE_WARN_COLOR);
+                    }
+                    else {
+                        lbScoreCaloricValue.setColor(Constants.SCORE_ERROR_COLOR);
+                    }
+
+                    Thread.sleep(700);
+
+                    for(int counter = 0; counter < scoreCarbs; counter += 10) {
+                        lbScoreCarbs.setText(String.valueOf(counter));
+                        Thread.sleep(20);
+                    }
+                    lbScoreCarbs.setText(String.valueOf(scoreCarbs));
+                    if(scoreCarbs > Constants.MAXIMUM_SCORE * 0.9) {
+                        lbScoreCarbs.setColor(Constants.SCORE_GOOD_COLOR);
+                    }
+                    else if(scoreCarbs > Constants.MAXIMUM_SCORE * 0.6) {
+                        lbScoreCarbs.setColor(Constants.SCORE_WARN_COLOR);
+                    }
+                    else {
+                        lbScoreCarbs.setColor(Constants.SCORE_ERROR_COLOR);
+                    }
+
+                    Thread.sleep(700);
+
+                    for(int counter = 0; counter < scoreFat; counter += 10) {
+                        lbScoreFat.setText(String.valueOf(counter));
+                        Thread.sleep(20);
+                    }
+                    lbScoreFat.setText(String.valueOf(scoreFat));
+                    if(scoreFat > Constants.MAXIMUM_SCORE * 0.9) {
+                        lbScoreFat.setColor(Constants.SCORE_GOOD_COLOR);
+                    }
+                    else if(scoreFat > Constants.MAXIMUM_SCORE * 0.6) {
+                        lbScoreFat.setColor(Constants.SCORE_WARN_COLOR);
+                    }
+                    else {
+                        lbScoreFat.setColor(Constants.SCORE_ERROR_COLOR);
+                    }
+
+                    Thread.sleep(700);
+
+                    for(int counter = 0; counter < scoreProteins; counter += 10) {
+                        lbScoreProteins.setText(String.valueOf(counter));
+                        Thread.sleep(20);
+                    }
+                    lbScoreProteins.setText(String.valueOf(scoreProteins));
+                    if(scoreProteins > Constants.MAXIMUM_SCORE * 0.9) {
+                        lbScoreProteins.setColor(Constants.SCORE_GOOD_COLOR);
+                    }
+                    else if(scoreProteins > Constants.MAXIMUM_SCORE * 0.6) {
+                        lbScoreProteins.setColor(Constants.SCORE_WARN_COLOR);
+                    }
+                    else {
+                        lbScoreProteins.setColor(Constants.SCORE_ERROR_COLOR);
+                    }
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        });
 
         return tbResult;
     }

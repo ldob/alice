@@ -20,6 +20,7 @@ import eu.ldob.alice.items.food.FoodType;
 import eu.ldob.alice.mode.Mode;
 import eu.ldob.alice.mode.Benefits;
 import eu.ldob.alice.items.FoodCounter;
+import eu.ldob.alice.util.SettingsStorage;
 
 public class GameScreen implements Screen {
 
@@ -106,8 +107,11 @@ public class GameScreen implements Screen {
             if(gameOverTime == -1) {
                 gameOverTime = System.currentTimeMillis();
                 background = backgroundGameOver;
-                music.setVolume(0.02f);
-                soundGameOver.play();
+
+                if(SettingsStorage.isSoundOn()) {
+                    music.setVolume(0.02f);
+                    soundGameOver.play();
+                }
             }
             else if(System.currentTimeMillis() - gameOverTime > 3000) {
                 game.showResultScreen(time, counter, mode);
@@ -123,14 +127,14 @@ public class GameScreen implements Screen {
                 counter.add(hit);
                 food.removeValue(hit);
 
-                if(hit.getFoodType() == FoodType.HEALTHY) {
-                    soundHealthyHit.play(0.5f);
-                }
-                else if(hit.getFoodType() == FoodType.JUNK) {
-                    soundJunkHit.play(0.5f);
-                }
-                else {
-                    soundNeutralHit.play(0.5f);
+                if(SettingsStorage.isSoundOn()){
+                    if (hit.getFoodType() == FoodType.HEALTHY) {
+                        soundHealthyHit.play(0.5f);
+                    } else if (hit.getFoodType() == FoodType.JUNK) {
+                        soundJunkHit.play(0.5f);
+                    } else {
+                        soundNeutralHit.play(0.5f);
+                    }
                 }
             }
         }

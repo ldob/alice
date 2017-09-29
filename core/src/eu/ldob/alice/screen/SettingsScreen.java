@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.util.StoreUtil;
+import eu.ldob.alice.util.SettingsStorage;
 
 
 public class SettingsScreen implements Screen {
@@ -53,11 +53,11 @@ public class SettingsScreen implements Screen {
         final TextButton btSave = new TextButton(Constants.SAVE_LABEL, skin);
 
         final Label lbName = new Label(Constants.NAME_LABEL, skin);
-        final TextField tfName = new TextField(StoreUtil.getPlayerName(), skin);
+        final TextField tfName = new TextField(SettingsStorage.getPlayerName(), skin);
 
         final Label lbSound = new Label(Constants.SOUND_LABEL, skin);
         final CheckBox cbSound = new CheckBox("", skin);
-        cbSound.setChecked(StoreUtil.isSoundOn());
+        cbSound.setChecked(SettingsStorage.isSoundOn());
 
         tbSettings.add(lbName).width(100).left();
         tbSettings.add(tfName).width(250);
@@ -71,8 +71,8 @@ public class SettingsScreen implements Screen {
         btSave.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                StoreUtil.savePlayerName(tfName.getText());
-                StoreUtil.saveSoundOn(cbSound.isChecked());
+                SettingsStorage.savePlayerName(tfName.getText());
+                SettingsStorage.saveSoundOn(cbSound.isChecked());
                 game.showHomeScreen();
             }
         });

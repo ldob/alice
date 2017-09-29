@@ -3,7 +3,6 @@ package eu.ldob.alice;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
@@ -18,6 +17,7 @@ import eu.ldob.alice.screen.LoadingScreen;
 import eu.ldob.alice.screen.ModeScreen;
 import eu.ldob.alice.screen.ResultScreen;
 import eu.ldob.alice.screen.SettingsScreen;
+import eu.ldob.alice.util.SettingsStorage;
 
 public class AliceGame extends Game {
 
@@ -41,6 +41,10 @@ public class AliceGame extends Game {
 		musicGame.setVolume(0.08f);
 		musicResult.setVolume(0.05f);
 
+		musicMenu.setLooping(true);
+		musicGame.setLooping(true);
+		musicResult.setLooping(true);
+
 		benefits = new Benefits();
 
 		showHomeScreen();
@@ -49,9 +53,13 @@ public class AliceGame extends Game {
 	public void showHomeScreen() {
 		musicGame.stop();
 		musicResult.stop();
-		if(!musicMenu.isPlaying()) {
+		if(!musicMenu.isPlaying() && SettingsStorage.isSoundOn()) {
 			musicMenu.play();
 		}
+		else if(musicMenu.isPlaying() && !SettingsStorage.isSoundOn()) {
+			musicMenu.stop();
+		}
+
 		setScreen(new HomeScreen(this, skin));
 	}
 
@@ -66,7 +74,7 @@ public class AliceGame extends Game {
 	public void showGameScreen(Mode mode) {
 		musicMenu.stop();
 		musicResult.stop();
-		if(!musicGame.isPlaying()) {
+		if(!musicGame.isPlaying() && SettingsStorage.isSoundOn()) {
 			musicGame.play();
 		}
 		setScreen(new GameScreen(this, skin, mode, benefits, musicGame));
@@ -75,7 +83,7 @@ public class AliceGame extends Game {
 	public void showResultScreen(float time, FoodCounter counter, Mode mode) {
 		musicMenu.stop();
 		musicGame.stop();
-		if(!musicResult.isPlaying()) {
+		if(!musicResult.isPlaying() && SettingsStorage.isSoundOn()) {
 			musicResult.play();
 		}
 		setScreen(new ResultScreen(this, skin, time, counter, mode, benefits));

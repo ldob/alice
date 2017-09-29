@@ -88,4 +88,6 @@ public class Constants {
     public static final String TOTAL_SCORE_LABEL = "Gesamt Score";
 
     public static final int INITIAL_FOOD_ARRAY_CAPACITY = 100;
+
+    public static final int MAXIMUM_SCORE = 1000;
 }
