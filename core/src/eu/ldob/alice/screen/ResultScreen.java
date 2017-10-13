@@ -1,7 +1,6 @@
 package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -9,19 +8,24 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.mode.Mode;
-import eu.ldob.alice.mode.Benefits;
-import eu.ldob.alice.items.FoodCounter;
+import eu.ldob.alice.AAliceScreen;
+import eu.ldob.alice.evaluation.Mode;
+import eu.ldob.alice.evaluation.Benefits;
+import eu.ldob.alice.items.util.FoodCounter;
 import eu.ldob.alice.rest.AliceHttpListener;
 import eu.ldob.alice.rest.AliceHttpRequest;
 
-public class ResultScreen implements Screen {
+public class ResultScreen extends AAliceScreen {
 
     private Stage stage;
     private Skin skin;
@@ -32,10 +36,6 @@ public class ResultScreen implements Screen {
     private Mode mode;
     private Benefits benefits;
 
-    private Label lbRank;
-    private int totalScore;
-    private String rank;
-
     public ResultScreen(AliceGame game, Skin skin, float time, FoodCounter counter, Mode mode, Benefits benefits) {
         this.game = game;
         this.skin = skin;
@@ -43,25 +43,6 @@ public class ResultScreen implements Screen {
         this.time = time;
         this.counter = counter;
         this.benefits = benefits;
-
-        init();
-    }
-
-    private void init() {
-        totalScore = mode.getEvaluation().getTotalScore(time, counter);
-
-        AliceHttpRequest.getInstance().setScore(mode, totalScore, new AliceHttpListener() {
-            @Override
-            public void onResult(String result) {
-                rank = result;
-                lbRank.setText("Rang: " + rank);
-            }
-
-            @Override
-            public void onError(String errorMessage) {
-                // do nothing
-            }
-        });
     }
 
     @Override
@@ -75,35 +56,25 @@ public class ResultScreen implements Screen {
         tbRoot.setDebug(Constants.DEBUG);
         stage.addActor(tbRoot);
 
-        final Label lbHead = new Label(Constants.RESULT_LABEL, skin);
-        tbRoot.add(lbHead).expand().top();
+        final Label lbHead = new Label(Constants.RESULT_LABEL, skin, "title");
+        tbRoot.add(lbHead).expand().top().padTop(30);
 
         Table tbResult = mode.getEvaluation().getResultTable(skin, benefits, time, counter);
         tbResult.setFillParent(true);
         tbResult.setDebug(Constants.DEBUG);
         tbRoot.addActor(tbResult);
 
-        Label lbTotalScore = new Label(Constants.TOTAL_SCORE_LABEL + ": " + totalScore, skin);
-
-        lbRank = new Label("...", skin);
-        lbRank.setAlignment(Align.center);
-        if(rank != null) {
-            lbRank.setText("Rang: " + rank);
-        }
-
         final TextButton btBack = new TextButton(Constants.BACK_LABEL, skin);
         final TextButton btAgain = new TextButton(Constants.AGAIN_LABEL, skin);
         final TextButton btHighscore = new TextButton(Constants.HIGHSCORE_LABEL, skin);
 
-        tbResult.row();
-        tbResult.add(lbTotalScore).colspan(4);
-        tbResult.add(lbRank).colspan(3);
-        tbResult.row().padTop(25);
-        tbResult.add(btBack).colspan(3);
-        tbResult.add(btAgain).colspan(2);
-        tbResult.add(btHighscore).colspan(2);
+        Table tbButtons = new Table(skin);
+        tbButtons.add(btBack).width(300);
+        tbButtons.add(btAgain).width(300);
+        tbButtons.add(btHighscore).width(300);
 
-        final ResultScreen instance = this;
+        tbRoot.row().padBottom(80);
+        tbRoot.add(tbButtons);
 
         btBack.addListener(new ChangeListener() {
             @Override
@@ -122,7 +93,70 @@ public class ResultScreen implements Screen {
         btHighscore.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.showHighscoreScreen(instance, mode);
+
+                final Table tbHighscore = new Table(skin);
+
+                tbHighscore.add(new Label(Constants.HIGHSCORE_LABEL, skin, "title")).colspan(2).center().expand();
+                tbHighscore.row().padTop(30);
+
+                final Window window = new Window("", skin);
+                /*window.setPosition(stage.getViewport().getWorldWidth() * 0.1f, stage.getViewport().getWorldHeight() * 0.1f);*/
+                window.setWidth(stage.getViewport().getWorldWidth()/* * 0.8f*/);
+                window.setHeight(stage.getViewport().getWorldHeight()/* * 0.8f*/);
+                window.add(tbHighscore);
+                stage.addActor(window);
+
+                final TextButton btBack = new TextButton(Constants.BACK_LABEL, skin);
+                btBack.pad(10, 20, 10, 20);
+
+                btBack.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        tbHighscore.remove();
+                        window.remove();
+                    }
+                });
+
+
+                AliceHttpRequest.getInstance().getHighscore(mode, new AliceHttpListener() {
+                    @Override
+                    public void onResult(String result) {
+
+                        JSONObject json = new JSONObject(result);
+                        JSONArray score = json.getJSONArray("highscore");
+
+                        final Label lbPlayer = new Label("Player", skin);
+                        lbPlayer.setAlignment(Align.center);
+                        final Label lbScore = new Label("Score", skin);
+                        lbScore.setAlignment(Align.center);
+
+                        tbHighscore.add(lbPlayer).uniform();
+                        tbHighscore.add(lbScore).uniform();
+                        tbHighscore.row().padTop(10);
+
+                        for(int i = 0; i < score.length() && i < 10; i++) {
+                            JSONObject scr = score.getJSONObject(i);
+
+                            tbHighscore.add(scr.getString("player")).padRight(30).padLeft(30);
+                            tbHighscore.add(scr.getString("score"));
+                            tbHighscore.row();
+                        }
+
+                        tbHighscore.row().padTop(25).height(80);
+                        tbHighscore.add(btBack).colspan(2);
+                    }
+
+                    @Override
+                    public void onError(String errorMessage) {
+
+                        final Label lbError = new Label("Fehler beim Laden des Highscores...\n(" + errorMessage + ")", skin);
+                        lbError.setAlignment(Align.center);
+
+                        tbHighscore.add(lbError).uniform();
+                        tbHighscore.row().padTop(25).height(80);
+                        tbHighscore.add(btBack).colspan(2);
+                    }
+                });
             }
         });
     }
@@ -132,6 +166,8 @@ public class ResultScreen implements Screen {
 
         Gdx.gl.glClearColor(Constants.BACKGROUND_COLOR_WHITE.r, Constants.BACKGROUND_COLOR_WHITE.g, Constants.BACKGROUND_COLOR_WHITE.b, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        mode.getEvaluation().updateResultTable();
 
         stage.act(delta);
         stage.draw();
@@ -144,12 +180,12 @@ public class ResultScreen implements Screen {
 
     @Override
     public void pause() {
-
+        game.pauseMusic();
     }
 
     @Override
     public void resume() {
-
+        game.resumeMusic();
     }
 
     @Override

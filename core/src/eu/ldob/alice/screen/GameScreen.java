@@ -1,28 +1,31 @@
 package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
+import eu.ldob.alice.AAliceScreen;
 import eu.ldob.alice.items.AFood;
 import eu.ldob.alice.items.FoodActor;
 import eu.ldob.alice.items.PlayerActor;
-import eu.ldob.alice.items.food.FoodType;
-import eu.ldob.alice.mode.Mode;
-import eu.ldob.alice.mode.Benefits;
-import eu.ldob.alice.items.FoodCounter;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.evaluation.AEvaluation;
+import eu.ldob.alice.evaluation.Mode;
+import eu.ldob.alice.evaluation.Benefits;
+import eu.ldob.alice.items.util.FoodCounter;
 import eu.ldob.alice.util.SettingsStorage;
 
-public class GameScreen implements Screen {
+public class GameScreen extends AAliceScreen {
 
     private AliceGame game;
 
@@ -34,6 +37,7 @@ public class GameScreen implements Screen {
 
     private Music music;
 
+    private Table tbRoot;
     private Table tbHud;
 
     private PlayerActor player;
@@ -66,6 +70,7 @@ public class GameScreen implements Screen {
         this.soundNeutralHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_neutral.wav"));
         this.soundJunkHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_junk.wav"));
         this.soundGameOver = Gdx.audio.newSound(Gdx.files.internal("sound/game_over.wav"));
+        // TODO sound on jump
     }
 
     @Override
@@ -74,7 +79,7 @@ public class GameScreen implements Screen {
         stage = new Stage(new FitViewport(Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT));
         Gdx.input.setInputProcessor(stage);
 
-        Table tbRoot = new Table();
+        tbRoot = new Table();
         tbRoot.setFillParent(true);
         tbRoot.setDebug(Constants.DEBUG);
         stage.addActor(tbRoot);
@@ -85,7 +90,7 @@ public class GameScreen implements Screen {
         time = 0;
         counter = new FoodCounter();
 
-        player = new PlayerActor(false, false);
+        player = new PlayerActor(benefits);
         food = new FoodActor(mode, benefits);
 
         stage.addActor(food);
@@ -112,8 +117,18 @@ public class GameScreen implements Screen {
                     music.setVolume(0.02f);
                     soundGameOver.play();
                 }
+
+                Table tbReason = new Table();
+                for(AEvaluation.GameOverReason reason : mode.getEvaluation().getGameOverReasons(benefits, time, counter)) {
+                    tbReason.row().padTop(10);
+                    tbReason.add(new Label(reason.getText(), skin)).center().expand();
+                }
+
+                Dialog dialog = new Dialog("", skin);
+                dialog.add(tbReason);
+                dialog.show(stage);
             }
-            else if(System.currentTimeMillis() - gameOverTime > 3000) {
+            else if(System.currentTimeMillis() - gameOverTime > 4000) {
                 game.showResultScreen(time, counter, mode);
             }
         }
@@ -125,7 +140,7 @@ public class GameScreen implements Screen {
 
             for (AFood hit : player.hitFood(food)) {
                 counter.add(hit);
-                food.removeValue(hit);
+                food.removeFood(hit);
 
                 if(SettingsStorage.isSoundOn()){
                     if (hit.getFoodType() == FoodType.HEALTHY) {
@@ -151,12 +166,12 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-
+        game.pauseMusic();
     }
 
     @Override
     public void resume() {
-
+        game.resumeMusic();
     }
 
     @Override

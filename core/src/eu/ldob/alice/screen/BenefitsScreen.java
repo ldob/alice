@@ -1,7 +1,6 @@
 package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -15,10 +14,11 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.mode.Benefits;
+import eu.ldob.alice.AAliceScreen;
+import eu.ldob.alice.evaluation.Benefits;
 
 
-public class BenefitsScreen implements Screen {
+public class BenefitsScreen extends AAliceScreen {
 
     private Stage stage;
     private Skin skin;
@@ -43,8 +43,8 @@ public class BenefitsScreen implements Screen {
         tbRoot.setDebug(Constants.DEBUG);
         stage.addActor(tbRoot);
 
-        final Label lbHead = new Label(Constants.BENEFITS_LABEL, skin);
-        tbRoot.add(lbHead).expand().top();
+        final Label lbHead = new Label(Constants.BENEFITS_LABEL, skin, "title");
+        tbRoot.add(lbHead).expand().top().padTop(30);
 
         Table tbBenefits = new Table();
         tbBenefits.setFillParent(true);
@@ -53,21 +53,21 @@ public class BenefitsScreen implements Screen {
 
         final Label lbDescription = new Label(Constants.BENEFITS_DESCRIPTION, skin);
 
-        final Label lbFast = new Label(Constants.FAST_LABEL, skin);
-        final CheckBox cbFast = new CheckBox("", skin);
-        cbFast.setChecked(benefits.isBenefitFastPlayer());
-
         final Label lbBig = new Label(Constants.BIG_LABEL, skin);
         final CheckBox cbBig = new CheckBox("", skin);
         cbBig.setChecked(benefits.isBenefitBiggerPlayer());
 
         final Label lbPersistent = new Label(Constants.PERSISTENT_LABEL, skin);
         final CheckBox cbPersistent = new CheckBox("", skin);
-        cbPersistent.setChecked(benefits.isBenefitPersistentPlayer());
+        cbPersistent.setChecked(benefits.isBenefitLongGameTime());
 
         final Label lbCaloric = new Label(Constants.CALORIC_LABEL, skin);
         final CheckBox cbCaloric = new CheckBox("", skin);
         cbCaloric.setChecked(benefits.isBenefitMoreCaloricValue());
+
+        final Label lbCoordination = new Label(Constants.COORDINATION_LABEL, skin);
+        final CheckBox cbCoordination = new CheckBox("", skin);
+        cbCoordination.setChecked(benefits.isBenefitJumpHigh());
 
         final Label lbHealthy = new Label(Constants.HEALTHY_LABEL, skin);
         final CheckBox cbHealthy = new CheckBox("", skin);
@@ -82,26 +82,26 @@ public class BenefitsScreen implements Screen {
 
         tbBenefits.add(lbDescription).fillX().colspan(2);
 
-        tbBenefits.row().padTop(25);
-        tbBenefits.add(lbFast).left();
-        tbBenefits.add(cbFast);
-        tbBenefits.row();
+        tbBenefits.row().padTop(40);
         tbBenefits.add(lbBig).left();
         tbBenefits.add(cbBig);
-        tbBenefits.row();
+        tbBenefits.row().padTop(25);
         tbBenefits.add(lbPersistent).left();
         tbBenefits.add(cbPersistent);
-        tbBenefits.row();
+        tbBenefits.row().padTop(25);
         tbBenefits.add(lbCaloric).left();
         tbBenefits.add(cbCaloric);
-        tbBenefits.row();
+        tbBenefits.row().padTop(25);
+        tbBenefits.add(lbCoordination).left();
+        tbBenefits.add(cbCoordination);
+        tbBenefits.row().padTop(25);
         tbBenefits.add(lbHealthy).left();
         tbBenefits.add(cbHealthy);
-        tbBenefits.row();
+        tbBenefits.row().padTop(25);
         tbBenefits.add(lbJunk).left();
         tbBenefits.add(cbJunk);
 
-        tbBenefits.row().padTop(25);
+        tbBenefits.row().padTop(40);
         tbBenefits.add(btBack).left();
         tbBenefits.add(btSave).right();
 
@@ -115,10 +115,10 @@ public class BenefitsScreen implements Screen {
         btSave.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                benefits.setBenefitFastPlayer(cbFast.isChecked());
                 benefits.setBenefitBiggerPlayer(cbBig.isChecked());
-                benefits.setBenefitPersistentPlayer(cbPersistent.isChecked());
+                benefits.setBenefitLongGameTime(cbPersistent.isChecked());
                 benefits.setBenefitMoreCaloricValue(cbCaloric.isChecked());
+                benefits.setBenefitJumpHigh(cbCoordination.isChecked());
                 benefits.setBenefitMoreHealthyFood(cbHealthy.isChecked());
                 benefits.setBenefitLessJunkFood(cbJunk.isChecked());
 
@@ -144,12 +144,12 @@ public class BenefitsScreen implements Screen {
 
     @Override
     public void pause() {
-
+        game.pauseMusic();
     }
 
     @Override
     public void resume() {
-
+        game.resumeMusic();
     }
 
     @Override

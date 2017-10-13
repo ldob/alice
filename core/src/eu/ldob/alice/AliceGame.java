@@ -2,16 +2,17 @@ package eu.ldob.alice;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import eu.ldob.alice.items.FoodCounter;
-import eu.ldob.alice.mode.Benefits;
-import eu.ldob.alice.mode.Mode;
+import eu.ldob.alice.items.util.FoodCounter;
+import eu.ldob.alice.evaluation.Benefits;
+import eu.ldob.alice.evaluation.Mode;
 import eu.ldob.alice.screen.BenefitsScreen;
 import eu.ldob.alice.screen.GameScreen;
-import eu.ldob.alice.screen.HighscoreScreen;
 import eu.ldob.alice.screen.HomeScreen;
 import eu.ldob.alice.screen.LoadingScreen;
 import eu.ldob.alice.screen.ModeScreen;
@@ -32,7 +33,23 @@ public class AliceGame extends Game {
 	@Override
 	public void create() {
 
-		skin = new Skin(Gdx.files.internal(Constants.SKIN));
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Roboto-Regular.ttf"));
+		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
+		parameter.size = 32;
+		BitmapFont roboto32 = generator.generateFont(parameter);
+
+		parameter.size = 24;
+		BitmapFont roboto24 = generator.generateFont(parameter);
+
+		generator.dispose();
+
+		skin = new Skin();
+		skin.add("roboto32", roboto32);
+		skin.add("roboto24", roboto24);
+		skin.addRegions(new TextureAtlas(Gdx.files.internal(Constants.SKIN_ATLAS)));
+		skin.load(Gdx.files.internal(Constants.SKIN_JSON));
+
 		musicMenu = Gdx.audio.newMusic(Gdx.files.internal("music/menu.mp3"));
 		musicGame = Gdx.audio.newMusic(Gdx.files.internal("music/game.mp3"));
 		musicResult = Gdx.audio.newMusic(Gdx.files.internal("music/result.mp3"));
@@ -89,10 +106,6 @@ public class AliceGame extends Game {
 		setScreen(new ResultScreen(this, skin, time, counter, mode, benefits));
 	}
 
-	public void showHighscoreScreen(ResultScreen resultScreen, Mode mode) {
-		setScreen(new HighscoreScreen(this, skin, mode, resultScreen));
-	}
-
 	public void showSettingsScreen() {
 		setScreen(new SettingsScreen(this, skin));
 	}
@@ -101,7 +114,35 @@ public class AliceGame extends Game {
 		setScreen(new LoadingScreen(this));
 	}
 
-	public void showScreen(Screen screen) {
+	public void showScreen(AAliceScreen screen) {
 		setScreen(screen);
 	}
+
+	public void setScreen(AAliceScreen screen) {
+		super.setScreen(screen);
+	}
+
+	private Music pausedMusic = null;
+
+    public void pauseMusic() {
+        if(musicMenu.isPlaying()) {
+            pausedMusic = musicMenu;
+            musicResult.pause();
+        }
+        else if(musicGame.isPlaying()) {
+            pausedMusic = musicGame;
+            musicGame.pause();
+        }
+        else if(musicResult.isPlaying()) {
+            pausedMusic = musicResult;
+            musicResult.pause();
+        }
+    }
+
+    public void resumeMusic() {
+        if(pausedMusic != null) {
+            pausedMusic.play();
+            pausedMusic = null;
+        }
+    }
 }

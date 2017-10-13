@@ -1,4 +1,4 @@
-package eu.ldob.alice.items.factory;
+package eu.ldob.alice.items.factory.food;
 
 
 import com.badlogic.gdx.math.Vector2;
@@ -7,10 +7,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import eu.ldob.alice.items.*;
-import eu.ldob.alice.items.factory.FoodFactoryUtil.Acceleration;
+import eu.ldob.alice.items.util.FoodFactoryUtil;
+import eu.ldob.alice.items.util.FoodFactoryUtil.Acceleration;
 import eu.ldob.alice.items.food.FoodIcecream;
-import eu.ldob.alice.items.food.FoodType;
-import eu.ldob.alice.mode.Benefits;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.evaluation.Mode;
 
 public class FoodFactoryIcecream implements eu.ldob.alice.items.IFoodFactory {
 
@@ -31,8 +32,8 @@ public class FoodFactoryIcecream implements eu.ldob.alice.items.IFoodFactory {
     }
 
     @Override
-    public AFood generate(Benefits benefits, Vector2 position) {
-        return new FoodIcecream(FOOD_TYPE, position, FoodFactoryUtil.getAcceleration(benefits, accelerations));
+    public AFood generate(Mode mode, Vector2 position) {
+        return new FoodIcecream(FOOD_TYPE, position, FoodFactoryUtil.getAcceleration(mode, accelerations));
     }
 
     @Override

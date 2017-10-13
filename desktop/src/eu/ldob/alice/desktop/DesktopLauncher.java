@@ -13,10 +13,8 @@ public class DesktopLauncher {
 		config.addIcon("icon/ic_launcher-64.png", FileType.Internal);
 		config.addIcon("icon/ic_launcher-32.png", FileType.Internal);
 		//config.fullscreen = true;
-		//config.height = 800;
-		//config.width = 1200;
-		config.height = 500;
-		config.width = 800;
+		config.height = 720;
+		config.width = 1280;
 		config.title = "ALICE";
 
 		new LwjglApplication(new AliceGame(), config);

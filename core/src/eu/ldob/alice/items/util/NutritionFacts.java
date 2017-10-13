@@ -1,4 +1,4 @@
-package eu.ldob.alice.items.food;
+package eu.ldob.alice.items.util;
 
 
 public class NutritionFacts implements Cloneable {

@@ -1,33 +1,31 @@
 package eu.ldob.alice.items.food;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
-import eu.ldob.alice.items.AFood;
+import eu.ldob.alice.items.*;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.items.util.NutritionFacts;
 
 
 public class FoodYogurt extends AFood {
 
     private final String NAME = "Joghurt";
 
-    private static final int CALORIC_VALUE = 145;
-    private static final int CARBS_VALUE = 22;
-    private static final int FAT_VALUE = 5;
-    private static final int PROTEIN_VALUE = 4;
-    private static final int VIT_A_VALUE = 0;
-    private static final int VIT_C_VALUE = 0;
-    private static final int CALCIUM_VALUE = 0;
-    private static final int IRON_VALUE = 0;
+    private static final int CALORIC_VALUE = 160;
+    private static final int CARBS_VALUE = 6;
+    private static final int FAT_VALUE = 15;
+    private static final int PROTEIN_VALUE = 6;
+    private static final int VIT_A_VALUE = 10;
+    private static final int VIT_C_VALUE = 1;
+    private static final int CALCIUM_VALUE = 140;
+    private static final int IRON_VALUE = 120;
 
     private static final float WIDTH = 64;
     private static final float HEIGHT = 64;
 
-    private NutritionFacts nutritionFacts;
+    private eu.ldob.alice.items.util.NutritionFacts nutritionFacts;
 
     private Vector2 position;
     private Vector2 velocity;

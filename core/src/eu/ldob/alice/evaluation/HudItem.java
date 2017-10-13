@@ -1,7 +1,11 @@
-package eu.ldob.alice.mode;
+package eu.ldob.alice.evaluation;
 
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 
 import eu.ldob.alice.Constants;
@@ -9,7 +13,7 @@ import eu.ldob.alice.Constants;
 public class HudItem {
 
     private Formatting formatting;
-    private float target;
+    private double target;
 
     protected final Label lbName;
     protected final Label lbValue;
@@ -17,16 +21,16 @@ public class HudItem {
     protected final Label lbTarget;
     protected final Label lbUnit;
 
-    protected HudItem(Label.LabelStyle style, String name, float target, String unit, Formatting formatting) {
+    protected HudItem(Skin skin, String name, double target, String unit, Formatting formatting) {
 
         this.formatting = formatting;
         this.target = target;
 
-        lbName = new Label(name, style);
-        lbValue = new Label("", style);
-        lbSeparator = new Label(Constants.SCORE_VALUE_SEPERATOR, style);
-        lbTarget = new Label(String.valueOf(MathUtils.round(target)), style);
-        lbUnit = new Label(unit, style);
+        lbName = new Label(name, skin);
+        lbValue = new Label("", skin);
+        lbSeparator = new Label(Constants.SCORE_VALUE_SEPERATOR, skin);
+        lbTarget = new Label(String.valueOf(Math.round(target)), skin);
+        lbUnit = new Label(unit, skin);
 
         lbName.setAlignment(Align.right);
         lbValue.setAlignment(Align.right);
@@ -39,6 +43,8 @@ public class HudItem {
 
         lbValue.setText(String.valueOf(MathUtils.round(value)));
 
+        // TODO
+        /*
         if(formatting == Formatting.NONE) {
             lbName.setColor(Constants.SCORE_DEFAULT_COLOR);
             lbValue.setColor(Constants.SCORE_DEFAULT_COLOR);
@@ -81,9 +87,10 @@ public class HudItem {
             lbTarget.setColor(Constants.SCORE_WARN_COLOR);
             lbUnit.setColor(Constants.SCORE_WARN_COLOR);
         }
+        */
     }
 
     protected enum Formatting {
-        POSITIVE, NEGATIVE, NEUTRAL, NONE;
+        POSITIVE, NEGATIVE, NEUTRAL, NONE
     }
 }

@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.ldob.alice.Constants;
+import eu.ldob.alice.evaluation.Benefits;
 
 public class PlayerActor extends Actor {
 
-    private float sizeScale = 1f;
-    private float speedScale = 1f;
+    private Benefits benefits;
 
     private Texture textureRight;
     private Texture textureLeft;
@@ -23,28 +23,16 @@ public class PlayerActor extends Actor {
 
     private Vector2 position;
 
-    public  PlayerActor() {
-        this(false);
-    }
+    public  PlayerActor(Benefits benefits) {
 
-    public PlayerActor(boolean big) {
-        this(big, false);
-    }
+        this.benefits = benefits;
 
-    public PlayerActor(boolean big, boolean fast) {
-        if(big) {
-            sizeScale = 1.4f;
-        }
-        if(fast) {
-            speedScale = 1.4f;
-        }
-
-        this.textureRight = new Texture(Gdx.files.internal("player/mario_right.png"));
-        this.textureLeft = new Texture(Gdx.files.internal("player/mario_left.png"));
+        this.textureRight = new Texture(Gdx.files.internal("player/player_right.png"));
+        this.textureLeft = new Texture(Gdx.files.internal("player/player_left.png"));
         this.texture = textureRight;
 
         this.setOrigin(Constants.PLAYER_WIDTH, Constants.PLAYER_HEIGHT);
-        this.position = new Vector2(Constants.PLAYER_WIDTH / 2, 0);
+        this.position = new Vector2(Constants.WORLD_WIDTH / 2, 0);
     }
 
     @Override
@@ -54,16 +42,16 @@ public class PlayerActor extends Actor {
 
     public void update(float delta) {
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            position.x -= delta * Constants.PLAYER_VELOCITY_SCALE * sizeScale;
+            position.x -= delta * Constants.PLAYER_VELOCITY_SCALE;
             texture = textureLeft;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            position.x += delta * Constants.PLAYER_VELOCITY_SCALE * sizeScale;
+            position.x += delta * Constants.PLAYER_VELOCITY_SCALE;
             texture = textureRight;
         }
 
         float accelerometerInput = -Gdx.input.getAccelerometerY() / (Constants.GRAVITATIONAL_ACCELERATION * Constants.ACCELEROMETER_SENSITIVITY);
-        position.x += -delta * accelerometerInput * Constants.PLAYER_VELOCITY_SCALE * sizeScale;
+        position.x += -delta * accelerometerInput * Constants.PLAYER_VELOCITY_SCALE;
 
         if(accelerometerInput > 0.1f) {
             texture = textureLeft;
@@ -106,7 +94,7 @@ public class PlayerActor extends Actor {
         long jumpDelta = now - jumpTime;
 
         if(position.y >= 0) {
-            position.y += delta * (Constants.JUMP_TIME / 2 - jumpDelta) * Constants.JUMP_SCALE;
+            position.y += delta * (benefits.getJumpTime() / 2 - jumpDelta) * Constants.JUMP_SCALE;
         }
         else {
             position.y = 0;

@@ -1,8 +1,5 @@
 package eu.ldob.alice.items;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -12,9 +9,9 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import java.util.Iterator;
 
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.items.food.FoodType;
-import eu.ldob.alice.mode.Benefits;
-import eu.ldob.alice.mode.Mode;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.evaluation.Benefits;
+import eu.ldob.alice.evaluation.Mode;
 
 public class FoodActor extends Actor implements Iterable<AFood> {
 
@@ -54,7 +51,7 @@ public class FoodActor extends Actor implements Iterable<AFood> {
             }
 
             if (MathUtils.random() < delta * spawnRate) {
-                foodList.add(foodFactory.generate(benefits, new Vector2(Constants.WORLD_WIDTH * 0.1f + MathUtils.random() * Constants.WORLD_WIDTH * 0.8f, Constants.WORLD_HEIGHT)));
+                foodList.add(foodFactory.generate(mode, new Vector2(Constants.WORLD_WIDTH * 0.1f + MathUtils.random() * Constants.WORLD_WIDTH * 0.8f, Constants.WORLD_HEIGHT)));
             }
         }
 
@@ -73,8 +70,8 @@ public class FoodActor extends Actor implements Iterable<AFood> {
         foodList.end();
     }
 
-    public void removeValue(AFood value) {
-        foodList.removeValue(value, true);
+    public void removeFood(AFood food) {
+        foodList.removeValue(food, true);
     }
 
     @Override

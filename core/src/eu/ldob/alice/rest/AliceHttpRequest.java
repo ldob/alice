@@ -3,7 +3,7 @@ package eu.ldob.alice.rest;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.*;
 
-import eu.ldob.alice.mode.Mode;
+import eu.ldob.alice.evaluation.Mode;
 import eu.ldob.alice.util.SettingsStorage;
 
 public class AliceHttpRequest {
@@ -22,9 +22,9 @@ public class AliceHttpRequest {
         return instance;
     }
 
-    public void getHighscore(final AliceHttpListener listener) {
+    public void getHighscore(Mode mode, final AliceHttpListener listener) {
         HttpRequest http = new HttpRequest(HttpMethods.GET);
-        http.setUrl(BASE_URL + "getHighscore.php");
+        http.setUrl(BASE_URL + "getHighscore.php?mode=" + mode.toString());
 
         Gdx.net.sendHttpRequest(http, new HttpResponseListener() {
 
@@ -47,7 +47,7 @@ public class AliceHttpRequest {
 
     public void setScore(Mode mode, int score, final AliceHttpListener listener) {
         HttpRequest http = new HttpRequest(HttpMethods.GET);
-        http.setUrl(BASE_URL + "setScore.php?mode=" + mode.toString() + "&player=" + SettingsStorage.getPlayerName() + "&score=" + score);
+        http.setUrl(BASE_URL + "setScore.php?mode=" + mode.toString() + "&player=" + SettingsStorage.getPlayerName().replace(" ", "").replace("?", "").replace("&", "") + "&score=" + score + "");
 
         Gdx.net.sendHttpRequest(http, new HttpResponseListener() {
 

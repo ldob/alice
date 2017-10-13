@@ -2,29 +2,30 @@ package eu.ldob.alice.items.food;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 
-import eu.ldob.alice.items.AFood;
+import eu.ldob.alice.items.*;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.items.util.NutritionFacts;
 
 
 public class FoodIcecream extends AFood {
 
     private final String NAME = "Eis";
 
-    private static final int CALORIC_VALUE = 236;
-    private static final int CARBS_VALUE = 26;
-    private static final int FAT_VALUE = 14;
-    private static final int PROTEIN_VALUE = 2;
-    private static final int VIT_A_VALUE = 0;
+    private static final int CALORIC_VALUE = 270;
+    private static final int CARBS_VALUE = 30;
+    private static final int FAT_VALUE = 15;
+    private static final int PROTEIN_VALUE = 4;
+    private static final int VIT_A_VALUE = 130;
     private static final int VIT_C_VALUE = 0;
-    private static final int CALCIUM_VALUE = 0;
-    private static final int IRON_VALUE = 0;
+    private static final int CALCIUM_VALUE = 140;
+    private static final int IRON_VALUE = 100;
 
     private static final float WIDTH = 86;
     private static final float HEIGHT = 86;
 
-    private NutritionFacts nutritionFacts;
+    private eu.ldob.alice.items.util.NutritionFacts nutritionFacts;
 
     private Vector2 position;
     private Vector2 velocity;

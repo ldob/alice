@@ -1,7 +1,6 @@
 package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,11 +13,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.mode.Benefits;
-import eu.ldob.alice.mode.Mode;
+import eu.ldob.alice.AAliceScreen;
+import eu.ldob.alice.evaluation.Benefits;
+import eu.ldob.alice.evaluation.Mode;
 
 
-public class ModeScreen implements Screen {
+public class ModeScreen extends AAliceScreen {
 
     private Stage stage;
     private Skin skin;
@@ -43,42 +43,40 @@ public class ModeScreen implements Screen {
         tbRoot.setDebug(Constants.DEBUG);
         stage.addActor(tbRoot);
 
-        final Label lbHead = new Label(Constants.MODE_LABEL, skin);
-        tbRoot.add(lbHead).expand().top();
+        final Label lbHead = new Label(Constants.MODE_LABEL, skin, "title");
+        tbRoot.add(lbHead).expand().top().padTop(30);
 
         Table tbMode = new Table();
         tbMode.setFillParent(true);
         tbMode.setDebug(Constants.DEBUG);
         tbRoot.addActor(tbMode);
 
-        final TextButton btTime = new TextButton(Mode.TIME.getName(), skin);
-        final TextButton btVitamins = new TextButton(Mode.COLLECT_VITAMINS.getName(), skin);
-        final TextButton btFat = new TextButton(Mode.AVOID_FAT.getName(), skin);
+        for(final Mode mode : Mode.values()) {
+            final TextButton btMode = new TextButton(mode.getName(), skin);
+            btMode.pad(15, 60, 15, 60);
 
-        tbMode.add(btTime).fillX().uniformX();
-        tbMode.row().padTop(15);
-        tbMode.add(btVitamins).fillX().uniformX();
-        tbMode.row().padTop(15);
-        tbMode.add(btFat).fillX().uniformX();
+            tbMode.add(btMode).fillX().uniform();
+            tbMode.row().padTop(30);
 
-        btTime.addListener(new ChangeListener() {
+            btMode.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent event, Actor actor) {
+                    game.showGameScreen(mode);
+                }
+            });
+        }
+
+        final TextButton btBack = new TextButton(Constants.BACK_LABEL, skin);
+        btBack.pad(15, 60, 15, 60);
+
+        tbMode.row().padTop(60);
+        tbMode.add(btBack).uniformY();
+
+
+        btBack.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.showGameScreen(Mode.TIME);
-            }
-        });
-
-        btVitamins.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.showGameScreen(Mode.COLLECT_VITAMINS);
-            }
-        });
-
-        btFat.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                game.showGameScreen(Mode.AVOID_FAT);
+                game.showHomeScreen();
             }
         });
     }
@@ -100,12 +98,12 @@ public class ModeScreen implements Screen {
 
     @Override
     public void pause() {
-
+        game.pauseMusic();
     }
 
     @Override
     public void resume() {
-
+        game.resumeMusic();
     }
 
     @Override

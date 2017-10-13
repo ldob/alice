@@ -1,11 +1,11 @@
-package eu.ldob.alice.items;
+package eu.ldob.alice.items.util;
 
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import eu.ldob.alice.items.food.NutritionFacts;
+import eu.ldob.alice.items.AFood;
 
 public class FoodCounter {
 

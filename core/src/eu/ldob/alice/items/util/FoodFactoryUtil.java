@@ -1,19 +1,20 @@
-package eu.ldob.alice.items.factory;
+package eu.ldob.alice.items.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Map;
 
-import eu.ldob.alice.mode.Benefits;
+import eu.ldob.alice.evaluation.Mode;
 
 public class FoodFactoryUtil {
 
-    protected static Vector2 getAcceleration(Benefits benefits, Map<Acceleration,Vector2> accelerations) {
+    public static Vector2 getAcceleration(Mode mode, Map<Acceleration,Vector2> accelerations) {
         Vector2 acceleration;
         float deviation = 30f;      // in percent
 
-        boolean moveSlow = benefits.isBenefitPersistentPlayer();
+        // TODO implement slow food
+        boolean moveSlow = false;
 
         if(moveSlow) {
             deviation = deviation / 1.5f;
@@ -33,7 +34,7 @@ public class FoodFactoryUtil {
         return acceleration.add(new Vector2(acceleration).scl((float) ((0.5 - Math.random()) * deviation / 100.0)));
     }
 
-    protected enum Acceleration {
+    public enum Acceleration {
         LOW, LOW_LEFT, LOW_RIGHT, HIGH, HIGH_LEFT, HIGH_RIGHT
     }
 }

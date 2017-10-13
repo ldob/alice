@@ -1,23 +1,19 @@
 package eu.ldob.alice.screen;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
+import eu.ldob.alice.AAliceScreen;
 
 
-public class LoadingScreen implements Screen {
+public class LoadingScreen extends AAliceScreen {
 
     private AliceGame game;
 
@@ -33,13 +29,7 @@ public class LoadingScreen implements Screen {
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        Table tbRoot = new Table();
-        tbRoot.setFillParent(true);
-        tbRoot.setDebug(Constants.DEBUG);
-        stage.addActor(tbRoot);
-
-        final Label lbHead = new Label(Constants.LOADING_LABEL, new Label.LabelStyle(new BitmapFont(), Constants.SCORE_DEFAULT_COLOR));
-        tbRoot.add(lbHead);
+        // TODO implement
     }
 
     @Override
@@ -59,12 +49,12 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void pause() {
-
+        game.pauseMusic();
     }
 
     @Override
     public void resume() {
-
+        game.resumeMusic();
     }
 
     @Override

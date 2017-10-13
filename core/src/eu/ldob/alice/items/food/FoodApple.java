@@ -4,26 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-import eu.ldob.alice.items.AFood;
+import eu.ldob.alice.items.*;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.items.util.NutritionFacts;
 
 
 public class FoodApple extends AFood {
 
     private final String NAME = "Apfel";
 
-    private static final int CALORIC_VALUE = 85;
-    private static final int CARBS_VALUE = 19;
+    private static final int CALORIC_VALUE = 65;
+    private static final int CARBS_VALUE = 15;
     private static final int FAT_VALUE = 0;
-    private static final int PROTEIN_VALUE = 1;
-    private static final int VIT_A_VALUE = 0;
-    private static final int VIT_C_VALUE = 0;
-    private static final int CALCIUM_VALUE = 0;
-    private static final int IRON_VALUE = 0;
+    private static final int PROTEIN_VALUE = 0;
+    private static final int VIT_A_VALUE = 10;
+    private static final int VIT_C_VALUE = 12;
+    private static final int CALCIUM_VALUE = 5;
+    private static final int IRON_VALUE = 200;
 
     private static final float WIDTH = 56;
     private static final float HEIGHT = 56;
 
-    private NutritionFacts nutritionFacts;
+    private eu.ldob.alice.items.util.NutritionFacts nutritionFacts;
 
     private Vector2 position;
     private Vector2 velocity;

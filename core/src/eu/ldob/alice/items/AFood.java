@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.items.food.FoodType;
-import eu.ldob.alice.items.food.NutritionFacts;
+import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.items.util.NutritionFacts;
 
 public abstract class AFood {
 

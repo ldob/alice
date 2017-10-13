@@ -1,7 +1,6 @@
 package eu.ldob.alice;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
 
 public class Constants {
 
@@ -13,16 +12,19 @@ public class Constants {
     public static final int PLAYER_WIDTH = 100;
     public static final int PLAYER_HEIGHT = 100;
 
-    //public static final String SKIN = "skins/glassy/glassy-ui.json";
-    public static final String SKIN = "skins/android/uiskin.json";
+    //public static final String SKIN = "skins/android/uiskin";
+    public static final String SKIN = "skins/comicui/comic-ui";
+
+    public static final String SKIN_JSON = SKIN + ".json";
+    public static final String SKIN_ATLAS = SKIN + ".atlas";
 
     public static final Color BACKGROUND_COLOR_WHITE = new Color(1f, 1f, 1f, 1f);
     public static final Color BACKGROUND_COLOR_BLACK = new Color(0f, 0f, 0f, 1f);
 
-    public static final Color SCORE_ERROR_COLOR = new Color(1f, 0f, 0f, 1f);
+    public static final Color SCORE_ERROR_COLOR = new Color(1f, 1f, 1f, 1f);
     public static final Color SCORE_WARN_COLOR = new Color(1f, 1f, 0f, 1f);
     public static final Color SCORE_GOOD_COLOR = new Color(0f, 1f, 0f, 1f);
-    public static final Color SCORE_DEFAULT_COLOR = new Color(0f, 0f, 0f, 1f);
+    public static final Color SCORE_DEFAULT_COLOR = new Color(0f, 0f, 1f, 1f);
 
     public static final float ACCELEROMETER_SENSITIVITY = 0.5f;
     public static final float GRAVITATIONAL_ACCELERATION = 9.8f;
@@ -30,13 +32,12 @@ public class Constants {
     public static final float PLAYER_VELOCITY_SCALE = 500;
     public static final float FOOD_VELOCITY_SCALE = 7;
 
-    public static final float JUMP_TIME = 750f;
     public static final float JUMP_SCALE = 3f;
 
     public static final String HOME_LABEL = "ALICE";
     public static final String LOADING_LABEL = "Loading";
     public static final String PLAY_LABEL = "Los!";
-    public static final String BENEFITS_LABEL = "Leistungen";
+    public static final String BENEFITS_LABEL = "Vorteile";
     public static final String MODE_LABEL = "Spielmodus";
     public static final String RESULT_LABEL = "Ergebnis";
     public static final String SETTINGS_LABEL = "Einstellungen";
@@ -52,15 +53,16 @@ public class Constants {
 
     public static final String BENEFITS_DESCRIPTION = "Was hast du in den letzten 24 Stunden gemacht?";
 
-    public static final String FAST_LABEL = "> 5km Laufen";
     public static final String BIG_LABEL = "> 1h Krafttraining";
     public static final String PERSISTENT_LABEL = "> 45min Ausdauertraining";
     public static final String CALORIC_LABEL = "> 15.000 Schritte";
+    public static final String COORDINATION_LABEL = "> 20 min Koordinationstraining";
     public static final String HEALTHY_LABEL = "Gesunde Ernährung";
     public static final String JUNK_LABEL = "Kein Junk-Food";
 
-    public static final String MODE_TIME_LABEL = "Spiel auf Zeit";
+    public static final String MODE_BALANCED_LABEL = "Ausgewogene Ernährung";
     public static final String MODE_VITAMINS_LABEL = "Hol dir Vitamine";
+    public static final String MODE_MINERAL_HUNTER_LABEL = "Mineralstoffjäger";
     public static final String MODE_FAT_LABEL = "Flucht vor Fett";
 
     public static final String SCORE_VALUE_SEPERATOR = " / ";
@@ -85,9 +87,18 @@ public class Constants {
 
     public static final String TOTAL_LABEL = "Gesamt";
     public static final String SCORE_LABEL = "Score";
-    public static final String TOTAL_SCORE_LABEL = "Gesamt Score";
+    public static final String SCORE_TOTAL_LABEL = "Gesamt Score";
+    public static final String RANK_TOTAL_LABEL = "Rang";
 
     public static final int INITIAL_FOOD_ARRAY_CAPACITY = 100;
 
-    public static final int MAXIMUM_SCORE = 1000;
+    public static final int TIME_TARGET = 60;                        // s
+    //public static final double CALORIC_VALUE_TARGET = 1880;        // kcal           // set in benefits
+    public static final int CARBS_TARGET = 280;                      // g
+    public static final int FAT_TARGET = 60;                         // g
+    public static final int PROTEINS_TARGET = 55;                    // g
+    public static final int VITAMIN_A_TARGET = 800;                  // ug
+    public static final int VITAMIN_C_TARGET = 100;                  // mg
+    public static final int CALCIUM_TARGET = 1000;                   // mg
+    public static final int IRON_TARGET = 10000;                     // ug
 }
