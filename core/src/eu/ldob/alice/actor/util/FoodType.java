@@ -1,4 +1,4 @@
-package eu.ldob.alice.items.util;
+package eu.ldob.alice.actor.util;
 
 public enum FoodType {
     HEALTHY, NEUTRAL, JUNK

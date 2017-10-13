@@ -1,12 +1,12 @@
-package eu.ldob.alice.items;
+package eu.ldob.alice.actor;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.items.util.FoodType;
-import eu.ldob.alice.items.util.NutritionFacts;
+import eu.ldob.alice.actor.util.FoodType;
+import eu.ldob.alice.actor.util.NutritionFacts;
 
 public abstract class AFood {
 

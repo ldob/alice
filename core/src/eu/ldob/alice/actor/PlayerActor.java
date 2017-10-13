@@ -1,4 +1,4 @@
-package eu.ldob.alice.items;
+package eu.ldob.alice.actor;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

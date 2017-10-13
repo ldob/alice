@@ -1,31 +1,31 @@
-package eu.ldob.alice.items.food;
+package eu.ldob.alice.actor.food;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
-import eu.ldob.alice.items.*;
-import eu.ldob.alice.items.util.FoodType;
-import eu.ldob.alice.items.util.NutritionFacts;
+import eu.ldob.alice.actor.AFood;
+import eu.ldob.alice.actor.util.FoodType;
+import eu.ldob.alice.actor.util.NutritionFacts;
 
 
-public class FoodApple extends AFood {
+public class FoodBurger extends AFood {
 
-    private final String NAME = "Apfel";
+    private final String NAME = "Burger";
 
-    private static final int CALORIC_VALUE = 65;
-    private static final int CARBS_VALUE = 15;
-    private static final int FAT_VALUE = 0;
-    private static final int PROTEIN_VALUE = 0;
-    private static final int VIT_A_VALUE = 10;
-    private static final int VIT_C_VALUE = 12;
-    private static final int CALCIUM_VALUE = 5;
-    private static final int IRON_VALUE = 200;
+    private static final int CALORIC_VALUE = 680;
+    private static final int CARBS_VALUE = 50;
+    private static final int FAT_VALUE = 40;
+    private static final int PROTEIN_VALUE = 40;
+    private static final int VIT_A_VALUE = 0;
+    private static final int VIT_C_VALUE = 0;
+    private static final int CALCIUM_VALUE = 10;
+    private static final int IRON_VALUE = 150;
 
-    private static final float WIDTH = 56;
-    private static final float HEIGHT = 56;
+    private static final float WIDTH = 86;
+    private static final float HEIGHT = 86;
 
-    private eu.ldob.alice.items.util.NutritionFacts nutritionFacts;
+    private NutritionFacts nutritionFacts;
 
     private Vector2 position;
     private Vector2 velocity;
@@ -34,13 +34,13 @@ public class FoodApple extends AFood {
 
     private Texture texture;
 
-    public FoodApple(FoodType foodType, Vector2 position, Vector2 acceleration) {
+    public FoodBurger(FoodType foodType, Vector2 position, Vector2 acceleration) {
         this.foodType = foodType;
         this.position = position;
         this.acceleration = acceleration;
         this.velocity = new Vector2();
 
-        this.texture = new Texture(Gdx.files.internal("food/apple.png"));
+        this.texture = new Texture(Gdx.files.internal("food/burger.png"));
 
         this.nutritionFacts = new NutritionFacts(CALORIC_VALUE, CARBS_VALUE, FAT_VALUE, PROTEIN_VALUE, VIT_A_VALUE, VIT_C_VALUE, CALCIUM_VALUE, IRON_VALUE);
     }

@@ -1,15 +1,30 @@
 package eu.ldob.alice.evaluation;
 
+
 public class Benefits {
 
     private static final int MAXIMUM_GAME_TIME_SHORT = 60;
     private static final int MAXIMUM_GAME_TIME_LONG = 80;
 
-    private static final int CALORIC_VALUE_LOW = 1880;
-    private static final int CALORIC_VALUE_HIGH = 2350;
+    private static final int CALORIC_VALUE_TARGET_LOW = 1880;   // kcal
+    private static final int CALORIC_VALUE_TARGET_HIGH = 2350;  // kcal
 
-    public static final float JUMP_TIME_LOW = 650f;
-    public static final float JUMP_TIME_HIGH = 900f;
+    private static final int CARBS_TARGET_LOW = 280;            // g
+    private static final int CARBS_TARGET_HIGH = 300;           // g
+
+    private static final int FAT_TARGET_LOW = 60;               // g
+    private static final int FAT_TARGET_HIGH = 70;              // g
+
+    private static final int PROTEINS_TARGET_LOW = 55;          // g
+    private static final int PROTEINS_TARGET_HIGH = 55;         // g
+
+    private static final int VITAMIN_A_TARGET = 800;            // ug
+    private static final int VITAMIN_C_TARGET = 100;            // mg
+    private static final int CALCIUM_TARGET = 1000;             // mg
+    private static final int IRON_TARGET = 10000;               // ug
+
+    private static final float JUMP_TIME_LOW = 650f;
+    private static final float JUMP_TIME_HIGH = 900f;
 
     private static final float FOOD_HEALTHY_SPAWN_FACTOR_MORE = 1.3f;
     private static final float FOOD_JUNK_SPAWN_FACTOR_LESS = 0.8f;
@@ -30,8 +45,51 @@ public class Benefits {
         return benefitBiggerPlayer ? 1.5f : 1f;
     }
 
+    public int getTarget(NutritionType type) {
+        switch(type) {
+            case CALORIC_VALUE: return this.getCaloricValueTarget();
+            case CARBS: return this.getCarbsTarget();
+            case FAT: return this.getFatTarget();
+            case PROTEINS: return this.getProteinsTarget();
+            case VITAMIN_A: return this.getVitaminATarget();
+            case VITAMIN_C: return this.getVitaminCTarget();
+            case CALCIUM: return this.getCalciumTarget();
+            case IRON: return this.getIronTarget();
+        }
+
+        throw new RuntimeException("NutritionType not implemented yet");
+    }
+
     public int getCaloricValueTarget() {
-        return benefitMoreCaloricValue ? CALORIC_VALUE_HIGH : CALORIC_VALUE_LOW;
+        return benefitMoreCaloricValue ? CALORIC_VALUE_TARGET_HIGH : CALORIC_VALUE_TARGET_LOW;
+    }
+
+    public int getCarbsTarget() {
+        return benefitMoreCaloricValue ? CARBS_TARGET_HIGH : CARBS_TARGET_LOW;
+    }
+
+    public int getFatTarget() {
+        return benefitMoreCaloricValue ? FAT_TARGET_HIGH : FAT_TARGET_LOW;
+    }
+
+    public int getProteinsTarget() {
+        return PROTEINS_TARGET_LOW;
+    }
+
+    public int getVitaminATarget() {
+        return VITAMIN_A_TARGET;
+    }
+
+    public int getVitaminCTarget() {
+        return VITAMIN_C_TARGET;
+    }
+
+    public int getCalciumTarget() {
+        return CALCIUM_TARGET;
+    }
+
+    public int getIronTarget() {
+        return IRON_TARGET;
     }
 
     public float getJumpTime() {

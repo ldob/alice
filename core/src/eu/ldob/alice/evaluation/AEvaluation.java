@@ -8,23 +8,22 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.async.AsyncExecutor;
 import com.badlogic.gdx.utils.async.AsyncTask;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.items.AFood;
-import eu.ldob.alice.items.util.FoodCounter;
-import eu.ldob.alice.items.util.NutritionFacts;
+import eu.ldob.alice.actor.AFood;
+import eu.ldob.alice.actor.util.FoodCounter;
+import eu.ldob.alice.actor.util.NutritionFacts;
 import eu.ldob.alice.rest.AliceHttpListener;
 import eu.ldob.alice.rest.AliceHttpRequest;
 
 public abstract class AEvaluation {
 
-    /**
-     * HUD TABLE
-     */
 
-    public abstract Table getHudTable(Skin skin, Benefits benefits);
-    public abstract void updateHudTable(float time, FoodCounter foodCounter);
+
+    private List<HudItem> hudItems;
+    private HudItem hiTime;
 
     /**
      * SCORE WEIGHT
@@ -43,96 +42,144 @@ public abstract class AEvaluation {
      * SCORE CALCULATION
      */
 
-    public int getCaloricValueScore(int caloricValue, int target) {
-        double ratio = (double)caloricValue / target;
+    public int getScore(NutritionType type, int value, Benefits benefits) {
+        switch(type) {
+            case CALORIC_VALUE: return this.getCaloricValueScore(value, benefits);
+            case CARBS: return this.getCarbsScore(value, benefits);
+            case FAT: return this.getFatScore(value, benefits);
+            case PROTEINS: return this.getProteinsScore(value, benefits);
+            case VITAMIN_A: return this.getVitaminAScore(value, benefits);
+            case VITAMIN_C: return this.getVitaminCScore(value, benefits);
+            case CALCIUM: return this.getCalciumScore(value, benefits);
+            case IRON: return this.getIronScore(value, benefits);
+        }
+
+        throw new RuntimeException("NutritionType not implemented yet");
+    }
+
+    public int getCaloricValueScore(int caloricValue, Benefits benefits) {
+        double ratio = (double)caloricValue / benefits.getCaloricValueTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 5) :  Math.pow(ratio, -7)) * this.getCaloricValueWeight());
     }
 
-    public int getCarbsScore(int carbs){
-        double ratio = (double)carbs / Constants.CARBS_TARGET;
+    public int getCarbsScore(int carbs, Benefits benefits){
+        double ratio = (double)carbs / benefits.getCarbsTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 2) :  Math.pow(ratio, -3)) * this.getCarbsWeight());
     }
 
-    public int getFatScore(int fat){
-        double ratio = (double)fat / Constants.FAT_TARGET;
+    public int getFatScore(int fat, Benefits benefits){
+        double ratio = (double)fat / benefits.getFatTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow((1.1 - ratio) / 1.1, 1/4) : Math.pow(ratio, -5) / 2) * this.getFatWeight());
     }
 
-    public int getProteinsScore(int proteins){
-        double ratio = (double)proteins / Constants.PROTEINS_TARGET;
+    public int getProteinsScore(int proteins, Benefits benefits){
+        double ratio = (double)proteins / benefits.getProteinsTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 2) * 4 / 5 * this.getProteinsWeight() : this.getProteinsWeight() - Math.pow(ratio, -1) / 5));
     }
 
-    public int getVitaminAScore(int vitaminA){
-        double ratio = (double)vitaminA / Constants.VITAMIN_A_TARGET;
+    public int getVitaminAScore(int vitaminA, Benefits benefits){
+        double ratio = (double)vitaminA / benefits.getVitaminATarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 5) * 7 / 10 * this.getVitaminAWeight() : this.getVitaminAWeight() - Math.pow(ratio, -1) * 3 / 10));
     }
 
-    public int getVitaminCScore(int vitaminC){
-        double ratio = (double)vitaminC / Constants.VITAMIN_C_TARGET;
+    public int getVitaminCScore(int vitaminC, Benefits benefits){
+        double ratio = (double)vitaminC / benefits.getVitaminCTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 5) * 7 / 10 * this.getVitaminCWeight() :  this.getVitaminCWeight() - Math.pow(ratio, -1) * 3 / 10));
     }
 
-    public int getCalciumScore(int calcium){
-        double ratio = calcium / Constants.CALCIUM_TARGET;
+    public int getCalciumScore(int calcium, Benefits benefits){
+        double ratio = calcium / benefits.getCalciumTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 3) :  Math.pow(ratio, -2)) * this.getCalciumWeight());
     }
 
-    public int getIronScore(int iron){
-        double ratio = (double)iron / Constants.IRON_TARGET;
+    public int getIronScore(int iron, Benefits benefits){
+        double ratio = (double)iron / benefits.getIronTarget();
         return MathUtils.ceil((float)(ratio <= 1 ? Math.pow(ratio, 3) :  Math.pow(ratio, -2)) * this.getIronWeight());
     }
 
     public int getTotalScore(FoodCounter foodCounter, Benefits benefits) {
         NutritionFacts tnf = foodCounter.getTotalNutritionFacts();
-        return  this.getCaloricValueScore(tnf.getCaloricValue(), benefits.getCaloricValueTarget()) +
-                this.getCarbsScore(tnf.getCarbs()) +
-                this.getFatScore(tnf.getFat()) +
-                this.getProteinsScore(tnf.getProteins());
+        return  this.getCaloricValueScore(tnf.getCaloricValue(), benefits) +
+                this.getCarbsScore(tnf.getCarbs(), benefits) +
+                this.getFatScore(tnf.getFat(), benefits) +
+                this.getProteinsScore(tnf.getProteins(), benefits);
+    }
+
+    /**
+     * HUD TABLE
+     */
+
+    public Table getHudTable(Skin skin, Benefits benefits) {
+
+        Table tbHud = new Table(skin);
+
+        hudItems = new ArrayList<HudItem>();
+
+        hiTime = new HudItem(skin, Constants.SCORE_TIME_LABEL, benefits.getMaxmumGameTime(), Constants.SCORE_TIME_UNIT);
+        hudItems.add(hiTime);
+
+        for(NutritionType type : this.getNutritionTypes()) {
+            final HudItem hudItem = new HudItem(skin, type, benefits);
+            hudItems.add(hudItem);
+        }
+
+        for(HudItem hudItem : hudItems) {
+            tbHud.add(hudItem.lbName).width(250).fillX();
+            tbHud.add(hudItem.lbValue).width(60).fillX();
+            tbHud.add(hudItem.lbSeparator).width(25).fillX();
+            tbHud.add(hudItem.lbTarget).width(70).fillX();
+            tbHud.add(hudItem.lbUnit).width(50).fillX();
+            tbHud.row();
+        }
+
+        tbHud.padRight(30).padTop(15);
+
+        return tbHud;
+    }
+
+    public void updateHudTable(float time, FoodCounter foodCounter) {
+
+        NutritionFacts totalNutritionFacts = foodCounter.getTotalNutritionFacts();
+
+        hiTime.update(time);
+
+        for(HudItem hudItem : hudItems) {
+            if(hudItem.getNutritionType() != null) {
+                hudItem.update(totalNutritionFacts.get(hudItem.getNutritionType()));
+            }
+        }
     }
 
     /**
      * RESULT TABLE
      */
+    private Label[] lbScores;
+    private int[] scores;
+    private int[] shownScores;
 
-
-    private Label lbScoreCaloricValue;
-    private Label lbScoreCarbs;
-    private Label lbScoreFat;
-    private Label lbScoreProteins;
     private Label lbScoreTotal;
     private Label lbRankTotal;
 
-    private int scoreCaloricValueShown = -1;
-    private int scoreCarbsShown = -1;
-    private int scoreFatShown = -1;
-    private int scoreProteinsShown = -1;
     private int scoreTotalShown = -1;
     private int rankTotalShown = -1;
 
     private int rank = -1;
 
-    protected abstract List<EvaluationItem> getEvaluationItems();
+    protected abstract NutritionType[] getNutritionTypes();
 
-    public Table getResultTable(Skin skin, Benefits benefits, float time, FoodCounter foodCounter) {
+    public Table getResultTable(Skin skin, Benefits benefits, FoodCounter foodCounter) {
         final Table tbResult = new Table(skin);
 
-        List<EvaluationItem> evaluationItems = this.getEvaluationItems();
-
-        final Label lbCaloricValue = new Label("Brennwert\n[kcal]", skin);
-        lbCaloricValue.setAlignment(Align.center);
-        final Label lbCarbs = new Label("Kohlenhydrate\n[g]", skin);
-        lbCarbs.setAlignment(Align.center);
-        final Label lbFat = new Label("Fett\n[g]", skin);
-        lbFat.setAlignment(Align.center);
-        final Label lbProteins = new Label("Proteine\n[g]", skin);
-        lbProteins.setAlignment(Align.center);
+        NutritionType[] nutritionTypes = this.getNutritionTypes();
 
         tbResult.add().colspan(3);
-        tbResult.add(lbCaloricValue).colspan(3).width(250);
-        tbResult.add(lbCarbs).colspan(3).width(250);
-        tbResult.add(lbFat).colspan(3).width(250);
-        tbResult.add(lbProteins).colspan(3).width(250);
+
+        for(NutritionType type : nutritionTypes) {
+            final Label lbItem = new Label(type.getName() + "\n[" + type.getUnit() + "]", skin);
+            lbItem.setAlignment(Align.center);
+            tbResult.add(lbItem).colspan(3).width(250);
+        }
+
         tbResult.row().padTop(10);
 
         for(AFood food : foodCounter.getFoodList()) {
@@ -143,57 +190,41 @@ public abstract class AEvaluation {
             tbResult.add("x").padLeft(5).padRight(5).center();
             tbResult.add(food.getName()).left();
 
-            tbResult.add(String.valueOf(nf.getCaloricValue() * count)).right();
-            tbResult.add("(" + count + "x " + String.valueOf(nf.getCaloricValue()) + ")").colspan(2);
-
-            tbResult.add(String.valueOf(nf.getCarbs() * count)).right();
-            tbResult.add("(" + count + "x " + String.valueOf(nf.getCarbs()) + ")").colspan(2);
-
-            tbResult.add(String.valueOf(nf.getFat() * count)).right();
-            tbResult.add("(" + count + "x " + String.valueOf(nf.getFat()) + ")").colspan(2);
-
-            tbResult.add(String.valueOf(nf.getProteins() * count)).right();
-            tbResult.add("(" + count + "x " + String.valueOf(nf.getProteins()) + ")").colspan(2);
+            for(NutritionType type : nutritionTypes) {
+                int itemValue = nf.get(type);
+                tbResult.add(String.valueOf(itemValue * count)).right();
+                tbResult.add("(" + count + "x " + String.valueOf(itemValue) + ")").colspan(2);
+            }
 
             tbResult.row();
         }
 
         tbResult.row().padTop(10);
+        tbResult.add(Constants.TOTAL_LABEL).colspan(3).right();
 
         NutritionFacts tnf = foodCounter.getTotalNutritionFacts();
-
-        tbResult.add(Constants.TOTAL_LABEL).colspan(3).right();
-        tbResult.add(String.valueOf(tnf.getCaloricValue())).right();
-        tbResult.add("/");
-        tbResult.add(String.valueOf(benefits.getCaloricValueTarget())).left();
-        tbResult.add(String.valueOf(tnf.getCarbs())).right();
-        tbResult.add("/");
-        tbResult.add(String.valueOf(Constants.CARBS_TARGET)).left();
-        tbResult.add(String.valueOf(tnf.getFat())).right();
-        tbResult.add("/");
-        tbResult.add(String.valueOf(Constants.FAT_TARGET)).left();
-        tbResult.add(String.valueOf(tnf.getProteins())).right();
-        tbResult.add("/");
-        tbResult.add(String.valueOf(Constants.PROTEINS_TARGET)).left();
+        for(NutritionType type : nutritionTypes) {
+            tbResult.add(String.valueOf(tnf.get(type))).right();
+            tbResult.add("/");
+            tbResult.add(String.valueOf(benefits.getTarget(type))).left();
+        }
 
         tbResult.row().padTop(15);
         tbResult.add(Constants.SCORE_LABEL).colspan(3).right();
 
-        lbScoreCaloricValue = new Label("???", skin);
-        final int scoreCaloricValue = this.getCaloricValueScore(tnf.getCaloricValue(), benefits.getCaloricValueTarget());
-        tbResult.add(lbScoreCaloricValue).colspan(3);
+        int i = 0;
+        lbScores = new Label[nutritionTypes.length];
+        scores = new int[nutritionTypes.length];
+        for(NutritionType type : nutritionTypes) {
+            final Label lbValue = new Label("???", skin);
+            final int scoreValue = this.getScore(type, tnf.get(type), benefits);
 
-        lbScoreCarbs = new Label("???", skin);
-        final int scoreCarbs = this.getCarbsScore(tnf.getCarbs());
-        tbResult.add(lbScoreCarbs).colspan(3);
+            lbScores[i] = lbValue;
+            scores[i] = scoreValue;
+            i++;
 
-        lbScoreFat = new Label("???", skin);
-        final int scoreFat = this.getFatScore(tnf.getFat());
-        tbResult.add(lbScoreFat).colspan(3);
-
-        lbScoreProteins = new Label("???", skin);
-        final int scoreProteins = this.getProteinsScore(tnf.getProteins());
-        tbResult.add(lbScoreProteins).colspan(3);
+            tbResult.add(lbValue).colspan(3);
+        }
 
         tbResult.row().padTop(15);
         tbResult.add().colspan(3);
@@ -207,6 +238,11 @@ public abstract class AEvaluation {
         lbRankTotal = new Label("???", skin);
         tbResult.add(lbRankTotal).colspan(3).left().padLeft(15);
 
+        shownScores = new int[lbScores.length];
+        for(int j = 0; j < shownScores.length; j++) {
+            shownScores[j] = -1;
+        }
+
         AliceHttpRequest.getInstance().setScore(Mode.getByEvaluation(this), scoreTotal, new AliceHttpListener() {
             @Override
             public void onResult(String result) {
@@ -219,9 +255,7 @@ public abstract class AEvaluation {
             }
         });
 
-
         AsyncExecutor scoreUpdate = new AsyncExecutor(10);
-
         scoreUpdate.submit(new AsyncTask<Void>() {
 
             @Override
@@ -231,53 +265,27 @@ public abstract class AEvaluation {
                     Thread.sleep(2000);
 
                     scoreTotalShown = 0;
+                    int summedScores = 0;
                     int tmpTotalScore = 0;
 
-                    for(int counter = 0; counter < scoreCaloricValue; counter += scoreCaloricValue / 50) {
-                        scoreCaloricValueShown = counter;
-                        scoreTotalShown = tmpTotalScore + counter;
-                        Thread.sleep(20);
+
+                    for(int i = 0; i < lbScores.length; i++) {
+
+                        for(int counter = 1; counter < scores[i]; counter += MathUtils.floor(scores[i] / 50)) {
+                            shownScores[i] = counter;
+                            scoreTotalShown = tmpTotalScore + counter;
+                            Thread.sleep(20);
+                        }
+                        shownScores[i] = scores[i];
+                        summedScores += scores[i];
+                        scoreTotalShown = summedScores;
+                        tmpTotalScore = scoreTotalShown;
+
+                        Thread.sleep(700);
                     }
-                    scoreCaloricValueShown = scoreCaloricValue;
-                    scoreTotalShown = scoreCaloricValue;
-                    tmpTotalScore = scoreTotalShown;
-
-                    Thread.sleep(700);
-
-                    for(int counter = 0; counter < scoreCarbs; counter += scoreCarbs / 50) {
-                        scoreCarbsShown = counter;
-                        scoreTotalShown = tmpTotalScore + counter;
-                        Thread.sleep(20);
-                    }
-                    scoreCarbsShown = scoreCarbs;
-                    scoreTotalShown = scoreCaloricValue + scoreCarbs;
-                    tmpTotalScore = scoreTotalShown;
-
-                    Thread.sleep(700);
-
-                    for(int counter = 0; counter < scoreFat; counter += scoreFat / 50) {
-                        scoreFatShown = counter;
-                        scoreTotalShown = tmpTotalScore + counter;
-                        Thread.sleep(20);
-                    }
-                    scoreFatShown = scoreFat;
-                    scoreTotalShown = scoreCaloricValue + scoreCarbs + scoreFat;
-                    tmpTotalScore = scoreTotalShown;
-
-                    Thread.sleep(700);
-
-                    for(int counter = 0; counter < scoreProteins; counter += scoreProteins / 50) {
-                        scoreProteinsShown = counter;
-                        scoreTotalShown = tmpTotalScore + counter;
-                        Thread.sleep(20);
-                    }
-                    lbScoreProteins.setText(String.valueOf(scoreProteins));
-                    scoreTotalShown = scoreCaloricValue + scoreCarbs + scoreFat + scoreProteins;
-
-                    Thread.sleep(700);
 
                     if(rank != -1) {
-                        for (int counter = (rank + 50) * 20; counter >= rank; counter -= counter / 20) {
+                        for(int counter = (rank + 50) * 20; counter >= rank; counter -= counter / 20) {
                             rankTotalShown = counter;
                             Thread.sleep(20);
                         }
@@ -300,18 +308,12 @@ public abstract class AEvaluation {
 
     public void updateResultTable() {
 
-        if(scoreCaloricValueShown > -1) {
-            lbScoreCaloricValue.setText(String.valueOf(scoreCaloricValueShown));
+        for(int i = 0; i < lbScores.length; i++) {
+            if(shownScores[i] > -1) {
+                lbScores[i].setText(String.valueOf(shownScores[i]));
+            }
         }
-        if(scoreCarbsShown > -1) {
-            lbScoreCarbs.setText(String.valueOf(scoreCarbsShown));
-        }
-        if(scoreFatShown > -1) {
-            lbScoreFat.setText(String.valueOf(scoreFatShown));
-        }
-        if(scoreProteinsShown > -1) {
-            lbScoreProteins.setText(String.valueOf(scoreProteinsShown));
-        }
+
         if(scoreTotalShown > -1) {
             lbScoreTotal.setText(String.valueOf(scoreTotalShown));
         }
@@ -331,7 +333,7 @@ public abstract class AEvaluation {
     public abstract List<GameOverReason> getGameOverReasons(Benefits benefits, float time, FoodCounter foodCounter);
 
     public enum GameOverReason {
-        TIME("Zeit ist ausgelaufen!"), CALORIC_VALUE("Zu viel Brennwerte!"), FAT("Zu viel Fett!");
+        TIME("Zeit ist abgelaufen!"), CALORIC_VALUE("Zu viel Brennwerte!"), FAT("Zu viel Fett!");
 
         private String text;
 

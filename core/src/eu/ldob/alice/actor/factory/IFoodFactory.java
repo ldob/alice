@@ -1,8 +1,9 @@
-package eu.ldob.alice.items;
+package eu.ldob.alice.actor.factory;
 
 import com.badlogic.gdx.math.Vector2;
 
-import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.actor.AFood;
+import eu.ldob.alice.actor.util.FoodType;
 import eu.ldob.alice.evaluation.Mode;
 
 

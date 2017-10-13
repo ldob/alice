@@ -1,5 +1,7 @@
-package eu.ldob.alice.items.util;
+package eu.ldob.alice.actor.util;
 
+
+import eu.ldob.alice.evaluation.NutritionType;
 
 public class NutritionFacts implements Cloneable {
 
@@ -13,6 +15,8 @@ public class NutritionFacts implements Cloneable {
     private int iron;
 
     public NutritionFacts() {
+
+
         this.caloricValue = 0;
         this.carbs = 0;
         this.fat = 0;
@@ -89,4 +93,18 @@ public class NutritionFacts implements Cloneable {
         return iron;
     }
 
+    public int get(NutritionType type) {
+        switch(type) {
+            case CALORIC_VALUE: return this.caloricValue;
+            case CARBS: return this.carbs;
+            case FAT: return this.fat;
+            case PROTEINS: return this.proteins;
+            case VITAMIN_A: return this.vitaminA;
+            case VITAMIN_C: return this.vitaminC;
+            case CALCIUM: return this.calcium;
+            case IRON: return this.iron;
+        }
+
+        throw new RuntimeException("NutritionType not implemented yet");
+    }
 }

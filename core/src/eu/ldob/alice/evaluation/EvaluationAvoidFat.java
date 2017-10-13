@@ -1,31 +1,37 @@
 package eu.ldob.alice.evaluation;
 
 
+import com.badlogic.gdx.math.MathUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import eu.ldob.alice.actor.util.FoodCounter;
-import eu.ldob.alice.actor.util.NutritionFacts;
 
 import static eu.ldob.alice.evaluation.NutritionType.CALORIC_VALUE;
-import static eu.ldob.alice.evaluation.NutritionType.CARBS;
 import static eu.ldob.alice.evaluation.NutritionType.FAT;
-import static eu.ldob.alice.evaluation.NutritionType.PROTEINS;
+import static eu.ldob.alice.evaluation.NutritionType.IRON;
+import static eu.ldob.alice.evaluation.NutritionType.VITAMIN_C;
 
-public class EvaluationBalanced extends AEvaluation {
+public class EvaluationAvoidFat extends AEvaluation {
 
-    private static final int CALORIC_VALUE_WEIGHT = 1500;
-    private static final int CARBS_WEIGHT = 1200;
-    private static final int FAT_WEIGHT = 1200;
-    private static final int PROTEINS_WEIGHT = 1100;
-    private static final int VITAMIN_A_WEIGHT = 0;
+    private static final int CALORIC_VALUE_WEIGHT = 500;
+    private static final int CARBS_WEIGHT = 0;
+    private static final int FAT_WEIGHT = 3500;
+    private static final int PROTEINS_WEIGHT = 0;
+    private static final int VITAMIN_A_WEIGHT = 500;
     private static final int VITAMIN_C_WEIGHT = 0;
     private static final int CALCIUM_WEIGHT = 0;
-    private static final int IRON_WEIGHT = 0;
+    private static final int IRON_WEIGHT = 500;
 
     @Override
     protected NutritionType[] getNutritionTypes() {
-        return new NutritionType[]{ CALORIC_VALUE, CARBS, FAT, PROTEINS };
+        return new NutritionType[]{ CALORIC_VALUE, FAT, VITAMIN_C, IRON };
+    }
+
+    @Override
+    public int getFatScore(int fat, Benefits benefits){
+        return MathUtils.round(Math.max(1, 1.0f / (fat - benefits.getFatTarget())));
     }
 
     @Override
@@ -75,31 +81,15 @@ public class EvaluationBalanced extends AEvaluation {
             return true;
         }
 
-        NutritionFacts totalNutritionFacts = foodCounter.getTotalNutritionFacts();
-
-        return (
-                totalNutritionFacts.getCaloricValue() > benefits.getCaloricValueTarget() * 1.2f
-                    ||
-                totalNutritionFacts.getFat() > benefits.getFatTarget() * 1.2f
-        );
+        return false;
     }
 
     @Override
-    public List<GameOverReason> getGameOverReasons(eu.ldob.alice.evaluation.Benefits benefits, float time, FoodCounter foodCounter) {
+    public List<GameOverReason> getGameOverReasons(Benefits benefits, float time, FoodCounter foodCounter) {
         List<GameOverReason> reasons = new ArrayList<GameOverReason>();
-
-        NutritionFacts totalNutritionFacts = foodCounter.getTotalNutritionFacts();
 
         if(time > benefits.getMaxmumGameTime()) {
             reasons.add(GameOverReason.TIME);
-        }
-
-        if(totalNutritionFacts.getCaloricValue() > benefits.getCaloricValueTarget() * 1.2f) {
-            reasons.add(GameOverReason.CALORIC_VALUE);
-        }
-
-        if(totalNutritionFacts.getFat() > benefits.getFatTarget() * 1.2f) {
-            reasons.add(GameOverReason.FAT);
         }
 
         return reasons;

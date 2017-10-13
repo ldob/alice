@@ -1,4 +1,4 @@
-package eu.ldob.alice.items.factory.food;
+package eu.ldob.alice.actor.factory.food;
 
 
 import com.badlogic.gdx.math.Vector2;
@@ -6,14 +6,15 @@ import com.badlogic.gdx.math.Vector2;
 import java.util.HashMap;
 import java.util.Map;
 
-import eu.ldob.alice.items.*;
-import eu.ldob.alice.items.util.FoodFactoryUtil;
-import eu.ldob.alice.items.util.FoodFactoryUtil.Acceleration;
-import eu.ldob.alice.items.food.FoodBurger;
-import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.actor.AFood;
+import eu.ldob.alice.actor.factory.IFoodFactory;
+import eu.ldob.alice.actor.util.FoodFactoryUtil;
+import eu.ldob.alice.actor.util.FoodFactoryUtil.Acceleration;
+import eu.ldob.alice.actor.food.FoodBurger;
+import eu.ldob.alice.actor.util.FoodType;
 import eu.ldob.alice.evaluation.Mode;
 
-public class FoodFactoryBurger implements eu.ldob.alice.items.IFoodFactory {
+public class FoodFactoryBurger implements IFoodFactory {
 
     private static final FoodType FOOD_TYPE = FoodType.JUNK;
 

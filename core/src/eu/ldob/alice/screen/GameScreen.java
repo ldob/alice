@@ -15,14 +15,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
 import eu.ldob.alice.AAliceScreen;
-import eu.ldob.alice.items.AFood;
-import eu.ldob.alice.items.FoodActor;
-import eu.ldob.alice.items.PlayerActor;
-import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.actor.AFood;
+import eu.ldob.alice.actor.FoodActor;
+import eu.ldob.alice.actor.PlayerActor;
+import eu.ldob.alice.actor.util.FoodType;
 import eu.ldob.alice.evaluation.AEvaluation;
 import eu.ldob.alice.evaluation.Mode;
 import eu.ldob.alice.evaluation.Benefits;
-import eu.ldob.alice.items.util.FoodCounter;
+import eu.ldob.alice.actor.util.FoodCounter;
 import eu.ldob.alice.util.SettingsStorage;
 
 public class GameScreen extends AAliceScreen {

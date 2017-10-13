@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
-import eu.ldob.alice.items.util.FoodCounter;
+import eu.ldob.alice.actor.util.FoodCounter;
 import eu.ldob.alice.evaluation.Benefits;
 import eu.ldob.alice.evaluation.Mode;
 import eu.ldob.alice.screen.BenefitsScreen;

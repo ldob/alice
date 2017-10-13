@@ -21,7 +21,7 @@ import eu.ldob.alice.Constants;
 import eu.ldob.alice.AAliceScreen;
 import eu.ldob.alice.evaluation.Mode;
 import eu.ldob.alice.evaluation.Benefits;
-import eu.ldob.alice.items.util.FoodCounter;
+import eu.ldob.alice.actor.util.FoodCounter;
 import eu.ldob.alice.rest.AliceHttpListener;
 import eu.ldob.alice.rest.AliceHttpRequest;
 
@@ -59,7 +59,7 @@ public class ResultScreen extends AAliceScreen {
         final Label lbHead = new Label(Constants.RESULT_LABEL, skin, "title");
         tbRoot.add(lbHead).expand().top().padTop(30);
 
-        Table tbResult = mode.getEvaluation().getResultTable(skin, benefits, time, counter);
+        Table tbResult = mode.getEvaluation().getResultTable(skin, benefits, counter);
         tbResult.setFillParent(true);
         tbResult.setDebug(Constants.DEBUG);
         tbRoot.addActor(tbResult);
@@ -149,7 +149,7 @@ public class ResultScreen extends AAliceScreen {
                     @Override
                     public void onError(String errorMessage) {
 
-                        final Label lbError = new Label("Fehler beim Laden des Highscores...\n(" + errorMessage + ")", skin);
+                        final Label lbError = new Label("Fehler beim Laden des Highscores...", skin);
                         lbError.setAlignment(Align.center);
 
                         tbHighscore.add(lbError).uniform();

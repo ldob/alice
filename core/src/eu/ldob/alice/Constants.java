@@ -91,14 +91,4 @@ public class Constants {
     public static final String RANK_TOTAL_LABEL = "Rang";
 
     public static final int INITIAL_FOOD_ARRAY_CAPACITY = 100;
-
-    public static final int TIME_TARGET = 60;                        // s
-    //public static final double CALORIC_VALUE_TARGET = 1880;        // kcal           // set in benefits
-    public static final int CARBS_TARGET = 280;                      // g
-    public static final int FAT_TARGET = 60;                         // g
-    public static final int PROTEINS_TARGET = 55;                    // g
-    public static final int VITAMIN_A_TARGET = 800;                  // ug
-    public static final int VITAMIN_C_TARGET = 100;                  // mg
-    public static final int CALCIUM_TARGET = 1000;                   // mg
-    public static final int IRON_TARGET = 10000;                     // ug
 }

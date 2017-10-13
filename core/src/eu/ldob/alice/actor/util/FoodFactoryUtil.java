@@ -1,4 +1,4 @@
-package eu.ldob.alice.items.util;
+package eu.ldob.alice.actor.util;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;

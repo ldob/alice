@@ -1,4 +1,4 @@
-package eu.ldob.alice.items;
+package eu.ldob.alice.actor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
@@ -9,7 +9,8 @@ import com.badlogic.gdx.utils.DelayedRemovalArray;
 import java.util.Iterator;
 
 import eu.ldob.alice.Constants;
-import eu.ldob.alice.items.util.FoodType;
+import eu.ldob.alice.actor.factory.IFoodFactory;
+import eu.ldob.alice.actor.util.FoodType;
 import eu.ldob.alice.evaluation.Benefits;
 import eu.ldob.alice.evaluation.Mode;
 
