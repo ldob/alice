@@ -15,6 +15,7 @@ import eu.ldob.alice.Constants;
 import eu.ldob.alice.actor.AFood;
 import eu.ldob.alice.actor.util.FoodCounter;
 import eu.ldob.alice.actor.util.NutritionFacts;
+import eu.ldob.alice.evaluation.formatting.NegativeFormatting;
 import eu.ldob.alice.rest.AliceHttpListener;
 import eu.ldob.alice.rest.AliceHttpRequest;
 
@@ -115,20 +116,16 @@ public abstract class AEvaluation {
 
         hudItems = new ArrayList<HudItem>();
 
-        hiTime = new HudItem(skin, Constants.SCORE_TIME_LABEL, benefits.getMaxmumGameTime(), Constants.SCORE_TIME_UNIT);
+        hiTime = new HudItem(skin, Constants.SCORE_TIME_LABEL, benefits.getMaxmumGameTime(), Constants.SCORE_TIME_UNIT, new NegativeFormatting());
         hudItems.add(hiTime);
 
         for(NutritionType type : this.getNutritionTypes()) {
-            final HudItem hudItem = new HudItem(skin, type, benefits);
+            final HudItem hudItem = new HudItem(skin, type, benefits, type.getFormatting());
             hudItems.add(hudItem);
         }
 
         for(HudItem hudItem : hudItems) {
-            tbHud.add(hudItem.lbName).width(250).fillX();
-            tbHud.add(hudItem.lbValue).width(60).fillX();
-            tbHud.add(hudItem.lbSeparator).width(25).fillX();
-            tbHud.add(hudItem.lbTarget).width(70).fillX();
-            tbHud.add(hudItem.lbUnit).width(50).fillX();
+            tbHud.add(hudItem.getRow());
             tbHud.row();
         }
 
@@ -271,7 +268,7 @@ public abstract class AEvaluation {
 
                     for(int i = 0; i < lbScores.length; i++) {
 
-                        for(int counter = 1; counter < scores[i]; counter += MathUtils.floor(scores[i] / 50)) {
+                        for(int counter = 1; counter < scores[i]; counter += MathUtils.ceil(scores[i] / 50f)) {
                             shownScores[i] = counter;
                             scoreTotalShown = tmpTotalScore + counter;
                             Thread.sleep(20);
@@ -285,7 +282,7 @@ public abstract class AEvaluation {
                     }
 
                     if(rank != -1) {
-                        for(int counter = (rank + 50) * 20; counter >= rank; counter -= counter / 20) {
+                        for(int counter = (rank + 50) * 20; counter > rank; counter -= MathUtils.ceil(counter / 20f)) {
                             rankTotalShown = counter;
                             Thread.sleep(20);
                         }
@@ -333,7 +330,7 @@ public abstract class AEvaluation {
     public abstract List<GameOverReason> getGameOverReasons(Benefits benefits, float time, FoodCounter foodCounter);
 
     public enum GameOverReason {
-        TIME("Zeit ist abgelaufen!"), CALORIC_VALUE("Zu viel Brennwerte!"), FAT("Zu viel Fett!");
+        TIME(Constants.GAMEOVER_TIME), CALORIC_VALUE(Constants.GAMEOVER_CALORIC_VALUE), FAT(Constants.GAMEOVER_FAT);
 
         private String text;
 

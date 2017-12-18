@@ -5,12 +5,15 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import java.util.List;
 
 import eu.ldob.alice.AliceGame;
 import eu.ldob.alice.Constants;
@@ -44,7 +47,10 @@ public class GameScreen extends AAliceScreen {
     private FoodActor food;
 
     private FoodCounter counter;
+
     private float time;
+    private int displayTime = -1;
+    private int oldDisplayTime = -1;
 
     private Texture background;
     private Texture backgroundGameOver;
@@ -63,8 +69,8 @@ public class GameScreen extends AAliceScreen {
         this.benefits = benefits;
         this.music = music;
 
-        this.background = new Texture(Gdx.files.internal("background/background.png"));
-        this.backgroundGameOver = new Texture(Gdx.files.internal("background/background_gameover.png"));
+        this.background = new Texture(Gdx.files.internal(Constants.GAME_BACKGROUND));
+        this.backgroundGameOver = new Texture(Gdx.files.internal(Constants.GAME_BACKGROUND_GAMEOVER));
 
         this.soundHealthyHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_healthy.wav"));
         this.soundNeutralHit = Gdx.audio.newSound(Gdx.files.internal("sound/hit_neutral.wav"));
@@ -82,7 +88,6 @@ public class GameScreen extends AAliceScreen {
         tbRoot = new Table();
         tbRoot.setFillParent(true);
         tbRoot.setDebug(Constants.DEBUG);
-        stage.addActor(tbRoot);
 
         tbHud = mode.getEvaluation().getHudTable(skin, benefits);
         tbRoot.add(tbHud).expand().right().top();
@@ -95,6 +100,7 @@ public class GameScreen extends AAliceScreen {
 
         stage.addActor(food);
         stage.addActor(player);
+        stage.addActor(tbRoot);
     }
 
     @Override
@@ -111,7 +117,9 @@ public class GameScreen extends AAliceScreen {
         if(mode.getEvaluation().isGameOver(benefits, time, counter)) {
             if(gameOverTime == -1) {
                 gameOverTime = System.currentTimeMillis();
+
                 background = backgroundGameOver;
+                player.gameover();
 
                 if(SettingsStorage.isSoundOn()) {
                     music.setVolume(0.02f);
@@ -137,8 +145,11 @@ public class GameScreen extends AAliceScreen {
             food.update(delta);
 
             time += delta;
+            oldDisplayTime = displayTime;
+            displayTime = MathUtils.round(time);
 
-            for (AFood hit : player.hitFood(food)) {
+            List<AFood> hitFood = player.hitFood(food);
+            for (AFood hit : hitFood) {
                 counter.add(hit);
                 food.removeFood(hit);
 
@@ -152,13 +163,16 @@ public class GameScreen extends AAliceScreen {
                     }
                 }
             }
+
+
+            if(oldDisplayTime == -1 || displayTime != oldDisplayTime || hitFood.size() > 0) {
+                mode.getEvaluation().updateHudTable(displayTime, counter);
+            }
         }
 
         stage.getBatch().begin();
         stage.getBatch().draw(background, 0, 0, Constants.WORLD_WIDTH, Constants.WORLD_HEIGHT);
         stage.getBatch().end();
-
-        mode.getEvaluation().updateHudTable(time, counter);
 
         stage.act(delta);
         stage.draw();

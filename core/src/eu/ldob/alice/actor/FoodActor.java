@@ -44,7 +44,6 @@ public class FoodActor extends Actor implements Iterable<AFood> {
                 spawnRate = foodFactory.getSpawnRate() * benefits.getHealthySpawnRateFactor();
             }
             else if(foodFactory.getFoodType() == FoodType.JUNK) {
-
                 spawnRate = foodFactory.getSpawnRate() * benefits.getJunkSpawnRateFactor();
             }
             else {
