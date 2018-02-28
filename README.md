@@ -7,13 +7,19 @@ numerous diseases. Serious Games can help promote a healthy lifestyle by support
 prototype of a user-centered Serious Game is designed and implemented, which creates awareness of healthy nutrition and 
 increases the motivation for physical activity at the same time. Evaluations show an improvement of the test subjects in both areas.
 
-More details can be found in my [Master's Thesis](TODO)
+More details can be found in my [Master's Thesis](TODO).
 
 ## Installation (Android)
 
-* download the file [alice.apk](TODO)
+* download the file [alice.apk](https://github.com/ldob/alice/blob/master/alice.apk)
 * run the file on your Android device
 * allow unknown sources
+* enjoy the game
+
+## Installation (Java)
+
+* download the file [alice.jar](https://github.com/ldob/alice/blob/master/alice.jar)
+* run the .jar file on your platform of trust
 * enjoy the game
 
 ## Installation (iOS or Web)
