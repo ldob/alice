@@ -11,14 +11,14 @@ More details can be found in my [Master's Thesis](TODO).
 
 ## Installation (Android)
 
-* download the file [alice.apk](https://github.com/ldob/alice/blob/master/alice.apk)
+* download the file [alice.apk](https://github.com/ldob/alice/raw/master/alice.apk)
 * run the file on your Android device
 * allow unknown sources
 * enjoy the game
 
 ## Installation (Java)
 
-* download the file [alice.jar](https://github.com/ldob/alice/blob/master/alice.jar)
+* download the file [alice.jar](https://github.com/ldob/alice/raw/master/alice.jar)
 * run the .jar file on your platform of trust
 * enjoy the game
 
