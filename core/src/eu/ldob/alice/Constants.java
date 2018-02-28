@@ -38,7 +38,6 @@ public class Constants {
     public static final float ANIMATION_FRAME_DURATION_WALKING = 1/8f;
     public static final float ANIMATION_FRAME_DURATION_RUNNING = 1/12f;
 
-    //public static final String SKIN = "skins/android/uiskin";
     public static final String SKIN = "skins/comicui/comic-ui";
 
     public static final String SKIN_JSON = SKIN + ".json";
@@ -62,7 +61,7 @@ public class Constants {
 
     public static final String HOME_LABEL = "ALICE";
     public static final String PLAY_LABEL = "Los!";
-    public static final String BENEFITS_LABEL = "Vorteile";
+    public static final String BENEFITS_LABEL = "Bonus";
     public static final String MODE_LABEL = "Spielmodus";
     public static final String RESULT_LABEL = "Ergebnis";
     public static final String SETTINGS_LABEL = "Einstellungen";

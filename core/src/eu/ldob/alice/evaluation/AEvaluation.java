@@ -157,14 +157,17 @@ public abstract class AEvaluation {
     private Label lbScoreTotal;
     private Label lbRankTotal;
 
-    private int scoreTotalShown = -1;
-    private int rankTotalShown = -1;
-
-    private int rank = -1;
+    private int scoreTotalShown;
+    private int rankTotalShown;
+    private int rank;
 
     protected abstract NutritionType[] getNutritionTypes();
 
     public Table getResultTable(Skin skin, Benefits benefits, FoodCounter foodCounter) {
+        scoreTotalShown = -1;
+        rankTotalShown = -1;
+        rank = -1;
+
         final Table tbResult = new Table(skin);
 
         NutritionType[] nutritionTypes = this.getNutritionTypes();

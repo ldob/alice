@@ -27,9 +27,11 @@ public class PixmapUtil {
 
     public TextureRegionDrawable getBackground(Color color) {
 
+        /*
         if(drawableColorMap.containsKey(color)) {
             return drawableColorMap.get(color);
         }
+        */
 
         Pixmap pixmap = new Pixmap(2, 2, Pixmap.Format.RGBA8888);
         pixmap.setColor(color);
