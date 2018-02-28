@@ -43,9 +43,9 @@ More details can be found in my [Master's Thesis](TODO).
 * [php](http://php.net/) - Backend Development
 * [MySql](https://www.mysql.com/) - Database
 
-## Authors
+## Author
 
-* **Lucas Dobler**
+* **Lucas Dobler** - [more about lucas](http://cv.ldob.eu/)
 
 ## License
 
